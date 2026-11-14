@@ -1,0 +1,16 @@
+# Local PostgreSQL for development. The API also runs on SQLite with no setup.
+#   docker compose up -d db
+#   DATABASE_URL=postgresql+psycopg://papertrail:papertrail@localhost:5432/papertrail uvicorn papertrail_api.main:app
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: papertrail
+      POSTGRES_PASSWORD: papertrail
+      POSTGRES_DB: papertrail
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - papertrail-db:/var/lib/postgresql/data
+volumes:
+  papertrail-db:

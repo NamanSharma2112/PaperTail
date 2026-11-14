@@ -1,0 +1,28 @@
+[project]
+name = "papertrail-api"
+version = "0.1.0"
+description = "PaperTrail backend: papers, claims, runs, deviations and the claim comparison"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "sqlalchemy>=2.0",
+    "pydantic>=2.7",
+    "httpx>=0.27",
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "psycopg[binary]>=3.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["papertrail_api"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
