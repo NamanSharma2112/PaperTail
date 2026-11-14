@@ -1,0 +1,100 @@
+{"dataset": "pubmed", "seed": 0, "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.71906, "epochs_run": 175, "early_stopped": true, "process_wall_seconds": 29.28}
+{"dataset": "pubmed", "seed": 1, "exit_code": 0, "test_accuracy": 0.798, "test_cost": 0.71722, "epochs_run": 162, "early_stopped": true, "process_wall_seconds": 26.27}
+{"dataset": "pubmed", "seed": 2, "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.74695, "epochs_run": 150, "early_stopped": true, "process_wall_seconds": 25.55}
+{"dataset": "pubmed", "seed": 3, "exit_code": 0, "test_accuracy": 0.787, "test_cost": 0.72366, "epochs_run": 149, "early_stopped": true, "process_wall_seconds": 23.9}
+{"dataset": "pubmed", "seed": 4, "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.71676, "epochs_run": 188, "early_stopped": true, "process_wall_seconds": 31.06}
+{"dataset": "pubmed", "seed": 5, "exit_code": 0, "test_accuracy": 0.795, "test_cost": 0.72822, "epochs_run": 154, "early_stopped": true, "process_wall_seconds": 24.29}
+{"dataset": "pubmed", "seed": 6, "exit_code": 0, "test_accuracy": 0.794, "test_cost": 0.73223, "epochs_run": 155, "early_stopped": true, "process_wall_seconds": 24.5}
+{"dataset": "pubmed", "seed": 7, "exit_code": 0, "test_accuracy": 0.795, "test_cost": 0.69754, "epochs_run": 178, "early_stopped": true, "process_wall_seconds": 27.23}
+{"dataset": "pubmed", "seed": 8, "exit_code": 0, "test_accuracy": 0.795, "test_cost": 0.71105, "epochs_run": 164, "early_stopped": true, "process_wall_seconds": 26.53}
+{"dataset": "pubmed", "seed": 9, "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.7396, "epochs_run": 176, "early_stopped": true, "process_wall_seconds": 26.65}
+{"dataset": "pubmed", "seed": 10, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.7431, "epochs_run": 128, "early_stopped": true, "process_wall_seconds": 20.06}
+{"dataset": "pubmed", "seed": 11, "train_args": [], "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.71362, "epochs_run": 166, "early_stopped": true, "process_wall_seconds": 26.5}
+{"dataset": "pubmed", "seed": 12, "train_args": [], "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.72939, "epochs_run": 162, "early_stopped": true, "process_wall_seconds": 23.91}
+{"dataset": "pubmed", "seed": 13, "train_args": [], "exit_code": 0, "test_accuracy": 0.787, "test_cost": 0.71284, "epochs_run": 200, "early_stopped": false, "process_wall_seconds": 29.48}
+{"dataset": "pubmed", "seed": 14, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.75293, "epochs_run": 137, "early_stopped": true, "process_wall_seconds": 22.81}
+{"dataset": "pubmed", "seed": 15, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.74439, "epochs_run": 128, "early_stopped": true, "process_wall_seconds": 20.28}
+{"dataset": "pubmed", "seed": 16, "train_args": [], "exit_code": 0, "test_accuracy": 0.792, "test_cost": 0.74528, "epochs_run": 120, "early_stopped": true, "process_wall_seconds": 19.12}
+{"dataset": "pubmed", "seed": 17, "train_args": [], "exit_code": 0, "test_accuracy": 0.792, "test_cost": 0.69415, "epochs_run": 195, "early_stopped": true, "process_wall_seconds": 28.75}
+{"dataset": "pubmed", "seed": 18, "train_args": [], "exit_code": 0, "test_accuracy": 0.786, "test_cost": 0.74095, "epochs_run": 134, "early_stopped": true, "process_wall_seconds": 20.46}
+{"dataset": "pubmed", "seed": 19, "train_args": [], "exit_code": 0, "test_accuracy": 0.787, "test_cost": 0.7109, "epochs_run": 183, "early_stopped": true, "process_wall_seconds": 27.23}
+{"dataset": "pubmed", "seed": 20, "train_args": [], "exit_code": 0, "test_accuracy": 0.79, "test_cost": 0.73227, "epochs_run": 164, "early_stopped": true, "process_wall_seconds": 25.36}
+{"dataset": "pubmed", "seed": 21, "train_args": [], "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.73173, "epochs_run": 159, "early_stopped": true, "process_wall_seconds": 29.04}
+{"dataset": "pubmed", "seed": 22, "train_args": [], "exit_code": 0, "test_accuracy": 0.794, "test_cost": 0.75995, "epochs_run": 140, "early_stopped": true, "process_wall_seconds": 24.22}
+{"dataset": "pubmed", "seed": 23, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.72472, "epochs_run": 181, "early_stopped": true, "process_wall_seconds": 29.27}
+{"dataset": "pubmed", "seed": 24, "train_args": [], "exit_code": 0, "test_accuracy": 0.786, "test_cost": 0.74327, "epochs_run": 119, "early_stopped": true, "process_wall_seconds": 19.24}
+{"dataset": "pubmed", "seed": 25, "train_args": [], "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.70579, "epochs_run": 168, "early_stopped": true, "process_wall_seconds": 25.99}
+{"dataset": "pubmed", "seed": 26, "train_args": [], "exit_code": 0, "test_accuracy": 0.794, "test_cost": 0.73255, "epochs_run": 137, "early_stopped": true, "process_wall_seconds": 21.34}
+{"dataset": "pubmed", "seed": 27, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.72633, "epochs_run": 162, "early_stopped": true, "process_wall_seconds": 26.28}
+{"dataset": "pubmed", "seed": 28, "train_args": [], "exit_code": 0, "test_accuracy": 0.796, "test_cost": 0.71754, "epochs_run": 144, "early_stopped": true, "process_wall_seconds": 22.35}
+{"dataset": "pubmed", "seed": 29, "train_args": [], "exit_code": 0, "test_accuracy": 0.782, "test_cost": 0.76238, "epochs_run": 127, "early_stopped": true, "process_wall_seconds": 20.38}
+{"dataset": "pubmed", "seed": 30, "train_args": [], "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.71658, "epochs_run": 167, "early_stopped": true, "process_wall_seconds": 25.98}
+{"dataset": "pubmed", "seed": 31, "train_args": [], "exit_code": 0, "test_accuracy": 0.792, "test_cost": 0.69794, "epochs_run": 200, "early_stopped": false, "process_wall_seconds": 32.03}
+{"dataset": "pubmed", "seed": 32, "train_args": [], "exit_code": 0, "test_accuracy": 0.797, "test_cost": 0.72095, "epochs_run": 155, "early_stopped": true, "process_wall_seconds": 24.69}
+{"dataset": "pubmed", "seed": 33, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.72564, "epochs_run": 175, "early_stopped": true, "process_wall_seconds": 26.45}
+{"dataset": "pubmed", "seed": 34, "train_args": [], "exit_code": 0, "test_accuracy": 0.786, "test_cost": 0.7408, "epochs_run": 146, "early_stopped": true, "process_wall_seconds": 23.18}
+{"dataset": "pubmed", "seed": 35, "train_args": [], "exit_code": 0, "test_accuracy": 0.794, "test_cost": 0.76105, "epochs_run": 124, "early_stopped": true, "process_wall_seconds": 20.71}
+{"dataset": "pubmed", "seed": 36, "train_args": [], "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.72033, "epochs_run": 167, "early_stopped": true, "process_wall_seconds": 25.07}
+{"dataset": "pubmed", "seed": 37, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.71467, "epochs_run": 157, "early_stopped": true, "process_wall_seconds": 25.28}
+{"dataset": "pubmed", "seed": 38, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.71928, "epochs_run": 200, "early_stopped": true, "process_wall_seconds": 30.13}
+{"dataset": "pubmed", "seed": 39, "train_args": [], "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.72957, "epochs_run": 133, "early_stopped": true, "process_wall_seconds": 22.01}
+{"dataset": "pubmed", "seed": 40, "train_args": [], "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.69081, "epochs_run": 200, "early_stopped": false, "process_wall_seconds": 31.82}
+{"dataset": "pubmed", "seed": 41, "train_args": [], "exit_code": 0, "test_accuracy": 0.797, "test_cost": 0.70778, "epochs_run": 179, "early_stopped": true, "process_wall_seconds": 28.01}
+{"dataset": "pubmed", "seed": 42, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.74594, "epochs_run": 150, "early_stopped": true, "process_wall_seconds": 23.89}
+{"dataset": "pubmed", "seed": 43, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.74812, "epochs_run": 139, "early_stopped": true, "process_wall_seconds": 21.56}
+{"dataset": "pubmed", "seed": 44, "train_args": [], "exit_code": 0, "test_accuracy": 0.786, "test_cost": 0.72769, "epochs_run": 164, "early_stopped": true, "process_wall_seconds": 24.77}
+{"dataset": "pubmed", "seed": 45, "train_args": [], "exit_code": 0, "test_accuracy": 0.792, "test_cost": 0.72742, "epochs_run": 143, "early_stopped": true, "process_wall_seconds": 22.5}
+{"dataset": "pubmed", "seed": 46, "train_args": [], "exit_code": 0, "test_accuracy": 0.796, "test_cost": 0.73453, "epochs_run": 141, "early_stopped": true, "process_wall_seconds": 22.82}
+{"dataset": "pubmed", "seed": 47, "train_args": [], "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.71375, "epochs_run": 170, "early_stopped": true, "process_wall_seconds": 27.83}
+{"dataset": "pubmed", "seed": 48, "train_args": [], "exit_code": 0, "test_accuracy": 0.792, "test_cost": 0.74788, "epochs_run": 130, "early_stopped": true, "process_wall_seconds": 20.45}
+{"dataset": "pubmed", "seed": 49, "train_args": [], "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.7067, "epochs_run": 184, "early_stopped": true, "process_wall_seconds": 28.58}
+{"dataset": "pubmed", "seed": 50, "train_args": [], "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.73512, "epochs_run": 145, "early_stopped": true, "process_wall_seconds": 23.99}
+{"dataset": "pubmed", "seed": 51, "train_args": [], "exit_code": 0, "test_accuracy": 0.795, "test_cost": 0.69308, "epochs_run": 195, "early_stopped": true, "process_wall_seconds": 34.31}
+{"dataset": "pubmed", "seed": 52, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.71408, "epochs_run": 170, "early_stopped": true, "process_wall_seconds": 27.16}
+{"dataset": "pubmed", "seed": 53, "train_args": [], "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.72492, "epochs_run": 164, "early_stopped": true, "process_wall_seconds": 24.97}
+{"dataset": "pubmed", "seed": 54, "train_args": [], "exit_code": 0, "test_accuracy": 0.787, "test_cost": 0.72794, "epochs_run": 165, "early_stopped": true, "process_wall_seconds": 26.04}
+{"dataset": "pubmed", "seed": 55, "train_args": [], "exit_code": 0, "test_accuracy": 0.795, "test_cost": 0.69719, "epochs_run": 200, "early_stopped": true, "process_wall_seconds": 30.2}
+{"dataset": "pubmed", "seed": 56, "train_args": [], "exit_code": 0, "test_accuracy": 0.785, "test_cost": 0.73088, "epochs_run": 200, "early_stopped": false, "process_wall_seconds": 32.59}
+{"dataset": "pubmed", "seed": 57, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.72692, "epochs_run": 147, "early_stopped": true, "process_wall_seconds": 22.42}
+{"dataset": "pubmed", "seed": 58, "train_args": [], "exit_code": 0, "test_accuracy": 0.792, "test_cost": 0.71289, "epochs_run": 169, "early_stopped": true, "process_wall_seconds": 27.51}
+{"dataset": "pubmed", "seed": 59, "train_args": [], "exit_code": 0, "test_accuracy": 0.79, "test_cost": 0.71086, "epochs_run": 179, "early_stopped": true, "process_wall_seconds": 27.81}
+{"dataset": "pubmed", "seed": 60, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.73087, "epochs_run": 157, "early_stopped": true, "process_wall_seconds": 24.12}
+{"dataset": "pubmed", "seed": 61, "train_args": [], "exit_code": 0, "test_accuracy": 0.787, "test_cost": 0.72812, "epochs_run": 173, "early_stopped": true, "process_wall_seconds": 26.87}
+{"dataset": "pubmed", "seed": 62, "train_args": [], "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.71614, "epochs_run": 157, "early_stopped": true, "process_wall_seconds": 24.73}
+{"dataset": "pubmed", "seed": 63, "train_args": [], "exit_code": 0, "test_accuracy": 0.785, "test_cost": 0.75192, "epochs_run": 122, "early_stopped": true, "process_wall_seconds": 19.62}
+{"dataset": "pubmed", "seed": 64, "train_args": [], "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.6895, "epochs_run": 200, "early_stopped": false, "process_wall_seconds": 31.06}
+{"dataset": "pubmed", "seed": 65, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.72376, "epochs_run": 162, "early_stopped": true, "process_wall_seconds": 24.58}
+{"dataset": "pubmed", "seed": 66, "train_args": [], "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.73409, "epochs_run": 142, "early_stopped": true, "process_wall_seconds": 22.66}
+{"dataset": "pubmed", "seed": 67, "train_args": [], "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.72354, "epochs_run": 152, "early_stopped": true, "process_wall_seconds": 23.11}
+{"dataset": "pubmed", "seed": 68, "train_args": [], "exit_code": 0, "test_accuracy": 0.784, "test_cost": 0.75832, "epochs_run": 139, "early_stopped": true, "process_wall_seconds": 22.02}
+{"dataset": "pubmed", "seed": 69, "train_args": [], "exit_code": 0, "test_accuracy": 0.797, "test_cost": 0.72443, "epochs_run": 147, "early_stopped": true, "process_wall_seconds": 20.33}
+{"dataset": "pubmed", "seed": 70, "train_args": [], "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.72335, "epochs_run": 147, "early_stopped": true, "process_wall_seconds": 23.0}
+{"dataset": "pubmed", "seed": 71, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.71654, "epochs_run": 172, "early_stopped": true, "process_wall_seconds": 28.33}
+{"dataset": "pubmed", "seed": 72, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.74167, "epochs_run": 135, "early_stopped": true, "process_wall_seconds": 21.36}
+{"dataset": "pubmed", "seed": 73, "train_args": [], "exit_code": 0, "test_accuracy": 0.792, "test_cost": 0.73379, "epochs_run": 129, "early_stopped": true, "process_wall_seconds": 20.92}
+{"dataset": "pubmed", "seed": 74, "train_args": [], "exit_code": 0, "test_accuracy": 0.79, "test_cost": 0.72995, "epochs_run": 162, "early_stopped": true, "process_wall_seconds": 25.24}
+{"dataset": "pubmed", "seed": 75, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.71562, "epochs_run": 194, "early_stopped": true, "process_wall_seconds": 29.64}
+{"dataset": "pubmed", "seed": 76, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.72288, "epochs_run": 159, "early_stopped": true, "process_wall_seconds": 24.33}
+{"dataset": "pubmed", "seed": 77, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.72284, "epochs_run": 174, "early_stopped": true, "process_wall_seconds": 32.67}
+{"dataset": "pubmed", "seed": 78, "train_args": [], "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.74046, "epochs_run": 152, "early_stopped": true, "process_wall_seconds": 25.01}
+{"dataset": "pubmed", "seed": 79, "train_args": [], "exit_code": 0, "test_accuracy": 0.787, "test_cost": 0.7436, "epochs_run": 155, "early_stopped": true, "process_wall_seconds": 24.6}
+{"dataset": "pubmed", "seed": 80, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.72666, "epochs_run": 173, "early_stopped": true, "process_wall_seconds": 25.99}
+{"dataset": "pubmed", "seed": 81, "train_args": [], "exit_code": 0, "test_accuracy": 0.788, "test_cost": 0.70633, "epochs_run": 187, "early_stopped": true, "process_wall_seconds": 27.95}
+{"dataset": "pubmed", "seed": 82, "train_args": [], "exit_code": 0, "test_accuracy": 0.79, "test_cost": 0.7174, "epochs_run": 173, "early_stopped": true, "process_wall_seconds": 25.86}
+{"dataset": "pubmed", "seed": 83, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.71347, "epochs_run": 161, "early_stopped": true, "process_wall_seconds": 24.7}
+{"dataset": "pubmed", "seed": 84, "train_args": [], "exit_code": 0, "test_accuracy": 0.795, "test_cost": 0.72015, "epochs_run": 159, "early_stopped": true, "process_wall_seconds": 25.37}
+{"dataset": "pubmed", "seed": 85, "train_args": [], "exit_code": 0, "test_accuracy": 0.794, "test_cost": 0.69157, "epochs_run": 200, "early_stopped": false, "process_wall_seconds": 30.81}
+{"dataset": "pubmed", "seed": 86, "train_args": [], "exit_code": 0, "test_accuracy": 0.79, "test_cost": 0.70774, "epochs_run": 200, "early_stopped": false, "process_wall_seconds": 31.68}
+{"dataset": "pubmed", "seed": 87, "train_args": [], "exit_code": 0, "test_accuracy": 0.786, "test_cost": 0.70425, "epochs_run": 197, "early_stopped": true, "process_wall_seconds": 31.8}
+{"dataset": "pubmed", "seed": 88, "train_args": [], "exit_code": 0, "test_accuracy": 0.793, "test_cost": 0.7205, "epochs_run": 162, "early_stopped": true, "process_wall_seconds": 24.84}
+{"dataset": "pubmed", "seed": 89, "train_args": [], "exit_code": 0, "test_accuracy": 0.783, "test_cost": 0.73255, "epochs_run": 155, "early_stopped": true, "process_wall_seconds": 23.64}
+{"dataset": "pubmed", "seed": 90, "train_args": [], "exit_code": 0, "test_accuracy": 0.791, "test_cost": 0.71898, "epochs_run": 169, "early_stopped": true, "process_wall_seconds": 26.68}
+{"dataset": "pubmed", "seed": 91, "train_args": [], "exit_code": 0, "test_accuracy": 0.792, "test_cost": 0.73006, "epochs_run": 136, "early_stopped": true, "process_wall_seconds": 21.91}
+{"dataset": "pubmed", "seed": 92, "train_args": [], "exit_code": 0, "test_accuracy": 0.787, "test_cost": 0.72878, "epochs_run": 171, "early_stopped": true, "process_wall_seconds": 26.4}
+{"dataset": "pubmed", "seed": 93, "train_args": [], "exit_code": 0, "test_accuracy": 0.787, "test_cost": 0.71791, "epochs_run": 170, "early_stopped": true, "process_wall_seconds": 25.62}
+{"dataset": "pubmed", "seed": 94, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.72325, "epochs_run": 190, "early_stopped": true, "process_wall_seconds": 28.81}
+{"dataset": "pubmed", "seed": 95, "train_args": [], "exit_code": 0, "test_accuracy": 0.798, "test_cost": 0.73151, "epochs_run": 166, "early_stopped": true, "process_wall_seconds": 22.91}
+{"dataset": "pubmed", "seed": 96, "train_args": [], "exit_code": 0, "test_accuracy": 0.792, "test_cost": 0.70774, "epochs_run": 185, "early_stopped": true, "process_wall_seconds": 23.61}
+{"dataset": "pubmed", "seed": 97, "train_args": [], "exit_code": 0, "test_accuracy": 0.789, "test_cost": 0.75484, "epochs_run": 117, "early_stopped": true, "process_wall_seconds": 16.28}
+{"dataset": "pubmed", "seed": 98, "train_args": [], "exit_code": 0, "test_accuracy": 0.79, "test_cost": 0.71064, "epochs_run": 199, "early_stopped": true, "process_wall_seconds": 25.41}
+{"dataset": "pubmed", "seed": 99, "train_args": [], "exit_code": 0, "test_accuracy": 0.792, "test_cost": 0.70286, "epochs_run": 173, "early_stopped": true, "process_wall_seconds": 23.16}

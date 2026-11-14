@@ -1,0 +1,54 @@
+{
+  "paper": {
+    "title": "Semi-Supervised Classification with Graph Convolutional Networks",
+    "authors": ["Thomas N. Kipf", "Max Welling"],
+    "venue": "ICLR 2017",
+    "arxiv_id": "1609.02907",
+    "arxiv_version_read": "v4 (22 Feb 2017)",
+    "official_code": "https://github.com/tkipf/gcn",
+    "official_code_commit_evaluated": "39a4089fe72ad9f055ed6fdb9746abdcfebc4d81"
+  },
+  "claims": [
+    {
+      "id": "table2-gcn-cora",
+      "dataset": "cora",
+      "metric": "test_accuracy_percent",
+      "reported_value": 81.5,
+      "reported_aggregation": "mean accuracy of 100 runs with random weight initializations",
+      "reported_dispersion": null,
+      "source": "Table 2, row 'GCN (this paper)'; aggregation stated in Section 6.1",
+      "in_scope": true
+    },
+    {
+      "id": "table2-gcn-citeseer",
+      "dataset": "citeseer",
+      "metric": "test_accuracy_percent",
+      "reported_value": 70.3,
+      "reported_aggregation": "mean accuracy of 100 runs with random weight initializations",
+      "reported_dispersion": null,
+      "source": "Table 2, row 'GCN (this paper)'; aggregation stated in Section 6.1",
+      "in_scope": true
+    },
+    {
+      "id": "table2-gcn-pubmed",
+      "dataset": "pubmed",
+      "metric": "test_accuracy_percent",
+      "reported_value": 79.0,
+      "reported_aggregation": "mean accuracy of 100 runs with random weight initializations",
+      "reported_dispersion": null,
+      "source": "Table 2, row 'GCN (this paper)'; aggregation stated in Section 6.1",
+      "in_scope": true
+    },
+    {
+      "id": "table2-gcn-nell",
+      "dataset": "nell",
+      "metric": "test_accuracy_percent",
+      "reported_value": 66.0,
+      "reported_aggregation": "mean accuracy of 100 runs with random weight initializations",
+      "reported_dispersion": null,
+      "source": "Table 2, row 'GCN (this paper)'",
+      "in_scope": false,
+      "out_of_scope_reason": "BLOCKED: the NELL dataset, its preprocessing and its hyperparameter configuration are not in the official repository at the evaluated commit."
+    }
+  ]
+}

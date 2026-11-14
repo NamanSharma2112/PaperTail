@@ -1,0 +1,129 @@
+{
+  "cora": {
+    "paper": {
+      "nodes": 2708,
+      "edges": 5429,
+      "classes": 7,
+      "features": 1433,
+      "label_rate": 0.052,
+      "train_labels_per_class": 20,
+      "validation": 500,
+      "test": 1000
+    },
+    "repository": {
+      "nodes": 2708,
+      "edges": 5278,
+      "self_loops": 0,
+      "classes": 7,
+      "features": 1433,
+      "label_rate": 0.052,
+      "nodes_with_all_zero_features": 0,
+      "isolated_nodes": 0,
+      "train": 140,
+      "train_labels_per_class": [
+        20,
+        20,
+        20,
+        20,
+        20,
+        20,
+        20
+      ],
+      "validation": 500,
+      "test": 1000,
+      "test_nodes_without_label": 0,
+      "split_overlap": 0,
+      "adjacency_symmetric": true
+    },
+    "matches": {
+      "nodes": true,
+      "edges": false,
+      "classes": true,
+      "features": true,
+      "label_rate": true
+    }
+  },
+  "citeseer": {
+    "paper": {
+      "nodes": 3327,
+      "edges": 4732,
+      "classes": 6,
+      "features": 3703,
+      "label_rate": 0.036,
+      "train_labels_per_class": 20,
+      "validation": 500,
+      "test": 1000
+    },
+    "repository": {
+      "nodes": 3327,
+      "edges": 4676,
+      "self_loops": 124,
+      "classes": 6,
+      "features": 3703,
+      "label_rate": 0.036,
+      "nodes_with_all_zero_features": 15,
+      "isolated_nodes": 0,
+      "train": 120,
+      "train_labels_per_class": [
+        20,
+        20,
+        20,
+        20,
+        20,
+        20
+      ],
+      "validation": 500,
+      "test": 1000,
+      "test_nodes_without_label": 0,
+      "split_overlap": 0,
+      "adjacency_symmetric": true
+    },
+    "matches": {
+      "nodes": true,
+      "edges": false,
+      "classes": true,
+      "features": true,
+      "label_rate": true
+    }
+  },
+  "pubmed": {
+    "paper": {
+      "nodes": 19717,
+      "edges": 44338,
+      "classes": 3,
+      "features": 500,
+      "label_rate": 0.003,
+      "train_labels_per_class": 20,
+      "validation": 500,
+      "test": 1000
+    },
+    "repository": {
+      "nodes": 19717,
+      "edges": 44327,
+      "self_loops": 3,
+      "classes": 3,
+      "features": 500,
+      "label_rate": 0.003,
+      "nodes_with_all_zero_features": 0,
+      "isolated_nodes": 0,
+      "train": 60,
+      "train_labels_per_class": [
+        20,
+        20,
+        20
+      ],
+      "validation": 500,
+      "test": 1000,
+      "test_nodes_without_label": 0,
+      "split_overlap": 0,
+      "adjacency_symmetric": true
+    },
+    "matches": {
+      "nodes": true,
+      "edges": false,
+      "classes": true,
+      "features": true,
+      "label_rate": true
+    }
+  }
+}

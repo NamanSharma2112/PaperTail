@@ -1,0 +1,3 @@
+{"dataset": "cora", "seed": 123, "exit_code": 0, "test_accuracy": 0.816, "test_cost": 1.00715, "epochs_run": 200, "early_stopped": false, "process_wall_seconds": 3.8}
+{"dataset": "cora", "seed": 123, "exit_code": 0, "test_accuracy": 0.816, "test_cost": 1.00715, "epochs_run": 200, "early_stopped": false, "process_wall_seconds": 3.44}
+{"dataset": "cora", "seed": 123, "exit_code": 0, "test_accuracy": 0.816, "test_cost": 1.00715, "epochs_run": 200, "early_stopped": false, "process_wall_seconds": 3.54}
