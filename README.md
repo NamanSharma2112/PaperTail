@@ -27,6 +27,12 @@ The pilot project's token, needed to edit it, is printed once by the seed step:
 docker compose logs seed
 ```
 
+To use a hosted PostgreSQL (Aiven, Neon, Supabase…) instead of the bundled one, put its URL in a `.env` file next to `docker-compose.yml` (git ignores it; see `.env.example`):
+
+```
+DATABASE_URL=postgres://user:password@host:port/dbname?sslmode=require
+```
+
 Stop with Ctrl+C. Data is kept in a Docker volume between runs. To delete it as well:
 
 ```bash

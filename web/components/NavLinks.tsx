@@ -4,14 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { href: "/", label: "Reproductions", match: (p: string) => p === "/" || p.startsWith("/projects") },
-  { href: "/graph", label: "Graph", match: (p: string) => p.startsWith("/graph") },
+  { href: "/", label: "Reproductions", n: "01", match: (p: string) => p === "/" || p.startsWith("/projects") },
+  { href: "/graph", label: "Graph", n: "02", match: (p: string) => p.startsWith("/graph") },
 ];
 
 export function NavLinks() {
   const pathname = usePathname() ?? "/";
   return (
-    <nav className="flex items-center gap-1 text-sm">
+    <nav className="flex items-center gap-1 text-[13.5px]">
       {LINKS.map((l) => {
         const active = l.match(pathname);
         return (
@@ -19,10 +19,11 @@ export function NavLinks() {
             key={l.href}
             href={l.href}
             aria-current={active ? "page" : undefined}
-            className={`press rounded-md px-2.5 py-1.5 !no-underline transition-colors duration-150 ${
-              active ? "bg-surface-2 font-semibold !text-ink" : "!text-ink-2 hover:bg-surface-2 hover:!text-ink"
+            className={`press inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 !no-underline ${
+              active ? "bg-surface font-medium !text-ink shadow-card ring-1 ring-line" : "!text-ink-2 hover:bg-surface-2 hover:!text-ink"
             }`}
           >
+            <span className="mono text-[10px] text-ink-3">{l.n}</span>
             {l.label}
           </Link>
         );

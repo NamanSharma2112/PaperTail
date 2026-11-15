@@ -38,41 +38,55 @@ export function NewProjectForm() {
   }
 
   return (
-    <div className="rounded-xl border border-line bg-surface p-5">
-      <h2 className="text-base font-semibold">Start a reproduction</h2>
-      <p className="mt-1 text-sm text-ink-2">Import the paper by its arXiv identifier or DOI. Title, authors and links are fetched for you.</p>
-      <form onSubmit={submit} className="mt-3 flex flex-col gap-2 sm:flex-row">
-        <label className="sr-only" htmlFor="identifier">
-          arXiv identifier or DOI
-        </label>
-        <input
-          id="identifier"
-          className="field"
-          placeholder="1609.02907 or 10.1371/journal.pbio.3003726"
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
-          required
-        />
-        <button className="btn shrink-0" disabled={busy || !identifier.trim()}>
-          {busy ? "Importing…" : "Import paper"}
-        </button>
-      </form>
+    <div className="sheet p-6 sm:p-8">
+      <div className="grid gap-6 md:grid-cols-[1fr_1.3fr] md:items-end">
+        <div>
+          <p className="eyebrow">New record</p>
+          <h3 className="title mt-2 text-2xl">Start with the paper</h3>
+          <p className="mt-2 text-sm text-ink-2">
+            Paste an arXiv identifier or a DOI. The title, authors and links are filled in for you; you add the numbers you want to check.
+          </p>
+        </div>
+        <form onSubmit={submit}>
+          <label className="label" htmlFor="identifier">
+            arXiv ID or DOI
+          </label>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <input
+              id="identifier"
+              className="field mono !text-[13px]"
+              placeholder="1609.02907"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              required
+              autoComplete="off"
+              spellCheck={false}
+            />
+            <button className="btn shrink-0" disabled={busy || !identifier.trim()}>
+              {busy ? "Importing…" : "Import paper →"}
+            </button>
+          </div>
+          <p className="mt-2 text-xs text-ink-3">
+            Try <button type="button" className="mono text-accent hover:underline" onClick={() => setIdentifier("1706.03762")}>1706.03762</button> or{" "}
+            <button type="button" className="mono text-accent hover:underline" onClick={() => setIdentifier("10.48550/arXiv.1412.6980")}>10.48550/arXiv.1412.6980</button>
+          </p>
+        </form>
+      </div>
       {error && (
-        <p role="alert" className="mt-2 text-sm">
+        <p role="alert" className="panel-in mt-4 rounded-lg bg-surface-2 px-3 py-2 text-sm">
           <span aria-hidden style={{ color: "var(--critical)" }}>✕ </span>
           {error}
         </p>
       )}
       {created && (
-        <div className="mt-3 rounded-lg bg-surface-2 p-3 text-sm">
+        <div className="panel-in mt-5 rounded-xl border border-line bg-surface-2 p-4 text-sm">
           <p>
-            Created <Link href={`/projects/${created.slug}`}>{created.title}</Link>.
+            <span aria-hidden style={{ color: "var(--good)" }}>✓ </span>
+            Created <Link href={`/projects/${created.slug}`}>{created.title}</Link>
           </p>
-          <p className="mt-2 font-semibold">Project token (shown once)</p>
-          <code className="mt-1 block break-all rounded bg-surface px-2 py-1.5 font-mono text-xs">{created.token}</code>
-          <p className="mt-1 text-xs text-ink-3">
-            Anyone with this token can edit the project and upload runs. It has been saved in this browser; keep a copy for the command line.
-          </p>
+          <p className="label mt-3">Project token · shown once</p>
+          <code className="mono block break-all rounded-lg border border-line bg-surface px-3 py-2 text-xs">{created.token}</code>
+          <p className="mt-2 text-xs text-ink-3">Anyone with this token can edit the project and upload runs. It is saved in this browser; keep a copy for the command line.</p>
         </div>
       )}
     </div>

@@ -67,8 +67,8 @@ export function EditPanel({ slug, claims }: { slug: string; claims: ClaimRef[] }
   const disabled = busy || !token.trim();
 
   return (
-    <details className="rounded-xl border border-line bg-surface p-5">
-      <summary className="cursor-pointer text-base font-semibold">Edit this project</summary>
+    <details className="sheet p-6">
+      <summary className="cursor-pointer text-[15px] font-medium">Add claims, deviations and conclusions <span className="text-ink-3">(needs the project token)</span></summary>
       <div className="mt-4">
         <label className="label" htmlFor="token">
           Project token
@@ -110,7 +110,7 @@ export function EditPanel({ slug, claims }: { slug: string; claims: ClaimRef[] }
             )
           }
         >
-          <h3 className="text-sm font-semibold">Add a claim</h3>
+          <h3 className="eyebrow !text-ink-2">Add a claim</h3>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="label" htmlFor="c-key">Short key</label>
@@ -181,7 +181,7 @@ export function EditPanel({ slug, claims }: { slug: string; claims: ClaimRef[] }
               )
             }
           >
-            <h3 className="text-sm font-semibold">Record a deviation</h3>
+            <h3 className="eyebrow !text-ink-2">Record a deviation</h3>
             <div>
               <label className="label" htmlFor="d-kind">Type</label>
               <select id="d-kind" name="kind" className="field" defaultValue="environment">
@@ -218,7 +218,7 @@ export function EditPanel({ slug, claims }: { slug: string; claims: ClaimRef[] }
               )
             }
           >
-            <h3 className="text-sm font-semibold">Record your conclusion</h3>
+            <h3 className="eyebrow !text-ink-2">Record your conclusion</h3>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="label" htmlFor="v-claim">Claim</label>

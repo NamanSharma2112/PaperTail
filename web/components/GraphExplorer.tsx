@@ -177,6 +177,12 @@ function layout(graph: WorkspaceGraph) {
     for (let i = 0; i < 500; i++) warm.tick();
   }
 
+  // Round so the server render and the browser agree exactly (their trig differs in the
+  // last digits, which React reports as a hydration mismatch).
+  for (const n of nodes) {
+    n.x = Math.round(n.x * 10) / 10;
+    n.y = Math.round(n.y * 10) / 10;
+  }
   const home = new Map(nodes.map((n) => [n.id, { x: n.x, y: n.y }]));
   const sim = forceSimulation<SimNode>(nodes)
     .force("homeX", forceX<SimNode>((n) => home.get(n.id)!.x).strength(0.08))
@@ -414,7 +420,7 @@ export function GraphExplorer({ graph }: { graph: WorkspaceGraph }) {
 
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-      <div className="relative overflow-hidden rounded-2xl border border-line bg-surface">
+      <div className="sheet dot-grid plate relative overflow-hidden">
         <div ref={toolbarRef} className="pointer-events-none absolute left-3 right-3 top-3 z-10 flex flex-wrap items-start gap-2 [&>*]:pointer-events-auto">
           <div className="relative w-full max-w-[260px]">
             <label htmlFor="graph-search" className="sr-only">
@@ -422,7 +428,7 @@ export function GraphExplorer({ graph }: { graph: WorkspaceGraph }) {
             </label>
             <input
               id="graph-search"
-              className="field !py-1.5 shadow-sm"
+              className="field !rounded-full !py-1.5 !pl-4 shadow-card"
               placeholder="Find a paper, dataset, claim…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -454,7 +460,7 @@ export function GraphExplorer({ graph }: { graph: WorkspaceGraph }) {
                     key={k}
                     onClick={() => toggleKind(k)}
                     aria-pressed={!off}
-                    className={`press inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium shadow-sm ${
+                    className={`press inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium shadow-card ${
                       off ? "border-line bg-surface text-ink-3 line-through" : "border-line bg-surface text-ink"
                     }`}
                   >
@@ -586,7 +592,7 @@ export function GraphExplorer({ graph }: { graph: WorkspaceGraph }) {
           </div>
         )}
 
-        <div className="absolute bottom-3 left-3 z-10 flex overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
+        <div className="absolute bottom-3 left-3 z-10 flex overflow-hidden rounded-full border border-line bg-surface shadow-card">
           {[
             { label: "Zoom in", text: "+", act: () => svgRef.current && zoomRef.current && select(svgRef.current).transition().duration(200).call(zoomRef.current.scaleBy, 1.3) },
             { label: "Zoom out", text: "−", act: () => svgRef.current && zoomRef.current && select(svgRef.current).transition().duration(200).call(zoomRef.current.scaleBy, 1 / 1.3) },
@@ -646,7 +652,7 @@ function Inspector({
   const href = node.type === "paper" ? paperLink(node) : node.url ?? null;
   const project = node.type === "claim" ? node.project : node.reproduced ? node.projects?.[0] : undefined;
   return (
-    <div className="panel-in rounded-2xl border border-line bg-surface p-4">
+    <div className="panel-in sheet p-5">
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-1.5 text-xs font-medium text-ink-3">
           <LegendShape kind={kind} />
@@ -656,7 +662,7 @@ function Inspector({
           ✕
         </button>
       </div>
-      <h2 className="mt-1.5 text-[15px] font-semibold leading-snug">{node.label}</h2>
+      <h2 className="title mt-2 text-[19px]">{node.label}</h2>
       {node.authors && node.authors.length > 0 && (
         <p className="mt-1 text-xs text-ink-2">
           {node.authors.slice(0, 4).join(", ")}
@@ -700,7 +706,7 @@ function Inspector({
         )}
       </div>
 
-      <h3 className="mt-4 border-t border-line pt-3 text-xs font-semibold uppercase tracking-wide text-ink-3">Connected to {links.length}</h3>
+      <h3 className="eyebrow mt-4 border-t border-line pt-3">Connected to {links.length}</h3>
       <ul className="mt-2 max-h-[340px] space-y-0.5 overflow-y-auto pr-1">
         {links
           .slice()
@@ -748,8 +754,8 @@ function Overview({
   const sources = nodes.filter((n) => kindOf(n) === "reference" && graph.edges.some((e) => e.target === n.id && e.relation !== "cites"));
   return (
     <div className="panel-in space-y-4">
-      <div className="rounded-2xl border border-line bg-surface p-4">
-        <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-3">In this workspace</h2>
+      <div className="sheet p-5">
+        <h2 className="eyebrow">In this workspace</h2>
         <div className="num mt-3 grid grid-cols-2 gap-3">
           <Stat value={counts.reproduced} label="reproduced papers" />
           <Stat value={counts.reference} label="cited or source papers" />
@@ -758,8 +764,8 @@ function Overview({
         </div>
       </div>
 
-      <div className="rounded-2xl border border-line bg-surface p-4">
-        <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-3">Where the data comes from</h2>
+      <div className="sheet p-5">
+        <h2 className="eyebrow">Where the data comes from</h2>
         {sources.length === 0 ? (
           <p className="mt-2 text-sm text-ink-2">No dataset sources recorded yet.</p>
         ) : (
@@ -776,8 +782,8 @@ function Overview({
         )}
       </div>
 
-      <div className="rounded-2xl border border-line bg-surface p-4">
-        <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-3">Most connected</h2>
+      <div className="sheet p-5">
+        <h2 className="eyebrow">Most connected</h2>
         <ul className="mt-2 space-y-0.5">
           {hubs.map((n) => (
             <NodeButton key={n.id} n={n} onSelect={onSelect} detail={`${n.degree} connections`} />
@@ -791,8 +797,8 @@ function Overview({
 function Stat({ value, label }: { value: number; label: string }) {
   return (
     <div>
-      <div className="text-xl font-bold">{value}</div>
-      <div className="text-xs text-ink-2">{label}</div>
+      <div className="text-[28px] font-light leading-none tracking-tight">{value}</div>
+      <div className="mt-1.5 text-xs text-ink-2">{label}</div>
     </div>
   );
 }
@@ -819,7 +825,7 @@ export function ConnectionList({ graph }: { graph: WorkspaceGraph }) {
     .map((e: GraphEdge) => ({ from: byId.get(e.source), to: byId.get(e.target), relation: e.relation }))
     .filter((r) => r.from && r.to);
   return (
-    <details className="rounded-2xl border border-line bg-surface p-4">
+    <details className="sheet p-5">
       <summary className="cursor-pointer text-sm font-semibold">All {rows.length} connections as a list</summary>
       <div className="mt-3 max-h-[420px] overflow-auto">
         <table className="w-full min-w-[560px] text-sm">

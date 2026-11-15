@@ -48,3 +48,11 @@ def test_diff_ci_hand_computed():
 
 def test_share_within_is_inclusive():
     assert share_within([81.0, 81.5, 82.0, 83.0], 81.5, 0.5) == pytest.approx(0.75)
+
+
+def test_hosted_database_urls_use_psycopg():
+    from papertrail_api.db import normalise_url
+    assert normalise_url("postgres://u:p@h:5432/d?sslmode=require") == "postgresql+psycopg://u:p@h:5432/d?sslmode=require"
+    assert normalise_url("postgresql://u:p@h/d") == "postgresql+psycopg://u:p@h/d"
+    assert normalise_url("postgresql+psycopg://u:p@h/d") == "postgresql+psycopg://u:p@h/d"
+    assert normalise_url("sqlite:///x.db") == "sqlite:///x.db"

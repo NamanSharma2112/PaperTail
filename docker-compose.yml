@@ -5,6 +5,7 @@
 # then open http://localhost:3000. The GCN pilot reproduction is loaded on first start;
 # its project token is printed by the "seed" service (docker compose logs seed).
 # Data lives in the "papertrail-db" volume; `docker compose down -v` removes it.
+# To use a hosted PostgreSQL instead, copy .env.example to .env and set DATABASE_URL.
 name: papertrail
 
 services:
@@ -32,7 +33,9 @@ services:
     image: papertrail-api
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql+psycopg://papertrail:papertrail@db:5432/papertrail
+      # Set DATABASE_URL in a .env file next to this one to use a hosted database
+      # (see .env.example); otherwise the bundled "db" service is used.
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://papertrail:papertrail@db:5432/papertrail}
       PAPERTRAIL_WEB_ORIGINS: http://localhost:3000
       # OPENALEX_API_KEY: ""   # optional, for frequent DOI imports
     ports:

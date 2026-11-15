@@ -57,6 +57,7 @@ export type Claim = {
   blocked_reason: string | null;
   verdict: Verdict | null;
   verdict_note: string | null;
+  dataset_key: string | null;
   comparison: { state: "blocked" | "not_run" | "partial" | "complete"; run_sets: RunSetComparison[] };
 };
 
@@ -67,6 +68,16 @@ export type Deviation = {
   why: string | null;
   expected_effect: string | null;
   applies_to: string | null;
+};
+
+export type DatasetRecord = {
+  key: string;
+  name: string;
+  status: "available" | "partial" | "unavailable";
+  url: string | null;
+  version: string | null;
+  note: string | null;
+  sources: { relation: string; title: string; arxiv_id?: string | null; doi?: string | null; year?: number | null }[];
 };
 
 export type RunSet = {
@@ -89,9 +100,12 @@ export type ProjectSummary = {
   verdicts: Record<string, number>;
   runs: number;
   deviations: number;
+  datasets: number;
+  references: number;
 };
 
-export type Project = Omit<ProjectSummary, "claims" | "deviations"> & {
+export type Project = Omit<ProjectSummary, "claims" | "deviations" | "datasets"> & {
+  datasets: DatasetRecord[];
   summary: string | null;
   code_url: string | null;
   code_commit: string | null;
