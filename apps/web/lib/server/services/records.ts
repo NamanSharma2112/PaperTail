@@ -108,6 +108,7 @@ export async function listDiscrepancies(db: Db, projectId: string) {
   );
 }
 
+const D_DEFAULTS: Record<string, string> = { severity: "medium", cause_status: "suspected", resolution_status: "open" };
 const D_FIELDS = ["run_id", "reported_metric_id", "category", "title", "description", "severity", "explanation", "cause_status", "evidence", "resolution_status", "notes"] as const;
 
 async function checkLinks(db: Db, projectId: string, input: Record<string, unknown>) {
@@ -121,7 +122,7 @@ export async function createDiscrepancy(db: Db, userId: string, projectId: strin
   const row = await one<{ id: string; title: string }>(
     db,
     `insert into discrepancies (project_id, created_by, ${D_FIELDS.join(", ")}) values ($1, $2, ${D_FIELDS.map((_, i) => `$${i + 3}`).join(", ")}) returning *`,
-    [projectId, userId, ...D_FIELDS.map((f) => input[f] ?? null)],
+    [projectId, userId, ...D_FIELDS.map((f) => input[f] ?? D_DEFAULTS[f] ?? null)],
   );
   await logActivity(db, projectId, userId, "discrepancy.created", `Recorded discrepancy "${row.title}"`);
   return row;

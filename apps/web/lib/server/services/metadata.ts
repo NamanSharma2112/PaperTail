@@ -104,7 +104,8 @@ export function parseCrossref(work: CrossrefWork, doi: string): PaperMetadata {
   return {
     title: clean(work.title?.[0]) || doi,
     authors: (work.author ?? []).map((a) => clean(a.name ?? [a.given, a.family].filter(Boolean).join(" "))).filter(Boolean),
-    abstract: work.abstract ? stripTags(decodeXml(work.abstract)).replace(/^Abstract\s+/i, "") : null,
+    // Crossref abstracts are JATS XML; many start with a <jats:title>Abstract</jats:title> heading.
+    abstract: work.abstract ? stripTags(decodeXml(work.abstract.replace(/<jats:title>\s*Abstract\s*<\/jats:title>/i, ""))) || null : null,
     doi,
     arxiv_id: null,
     publication_year: typeof year === "number" ? year : null,
