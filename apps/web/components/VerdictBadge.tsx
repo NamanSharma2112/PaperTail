@@ -1,4 +1,4 @@
-import type { Verdict } from "@/lib/api";
+export type Verdict = "matched" | "not_matched" | "inconclusive" | "blocked";
 
 export const VERDICT_STYLE: Record<string, { label: string; glyph: string; color: string }> = {
   matched: { label: "Matched", glyph: "✓", color: "var(--good)" },

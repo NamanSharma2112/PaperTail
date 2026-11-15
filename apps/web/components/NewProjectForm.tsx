@@ -1,94 +1,73 @@
 "use client";
-
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Field, Input, Select, Textarea } from "@/components/ui/field";
+import { api } from "@/lib/utils";
 
-type Created = { slug: string; title: string; token: string };
-
-export function NewProjectForm() {
-  const [identifier, setIdentifier] = useState("");
+export function NewProjectForm({ papers, preselect }: { papers: { id: string; title: string; publication_year: number | null }[]; preselect?: string }) {
+  const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [created, setCreated] = useState<Created | null>(null);
-
-  async function submit(event: React.FormEvent) {
-    event.preventDefault();
-    setBusy(true);
-    setError(null);
-    try {
-      const response = await fetch("/api/projects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier }),
-      });
-      const body = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(typeof body.detail === "string" ? body.detail : "Could not import that paper.");
-      try {
-        window.localStorage.setItem(`papertrail-token:${body.slug}`, body.token);
-      } catch {
-        /* storage unavailable: the token is still shown below */
-      }
-      setCreated({ slug: body.slug, title: body.title, token: body.token });
-      setIdentifier("");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not import that paper.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
+  const initial = papers.find((p) => p.id === preselect);
+  const [title, setTitle] = useState(initial ? `Reproducing: ${initial.title}`.slice(0, 300) : "");
   return (
-    <div className="sheet p-6 sm:p-8">
-      <div className="grid gap-6 md:grid-cols-[1fr_1.3fr] md:items-end">
-        <div>
-          <p className="eyebrow">New record</p>
-          <h3 className="title mt-2 text-2xl">Start with the paper</h3>
-          <p className="mt-2 text-sm text-ink-2">
-            Paste an arXiv identifier or a DOI. The title, authors and links are filled in for you; you add the numbers you want to check.
-          </p>
-        </div>
-        <form onSubmit={submit}>
-          <label className="label" htmlFor="identifier">
-            arXiv ID or DOI
-          </label>
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <input
-              id="identifier"
-              className="field mono !text-[13px]"
-              placeholder="1609.02907"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              required
-              autoComplete="off"
-              spellCheck={false}
-            />
-            <button className="btn shrink-0" disabled={busy || !identifier.trim()}>
-              {busy ? "Importing…" : "Import paper →"}
-            </button>
-          </div>
-          <p className="mt-2 text-xs text-ink-3">
-            Try <button type="button" className="mono text-accent hover:underline" onClick={() => setIdentifier("1706.03762")}>1706.03762</button> or{" "}
-            <button type="button" className="mono text-accent hover:underline" onClick={() => setIdentifier("10.48550/arXiv.1412.6980")}>10.48550/arXiv.1412.6980</button>
-          </p>
-        </form>
+    <form
+      className="space-y-5"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        const f = new FormData(e.currentTarget);
+        setBusy(true);
+        setError(null);
+        try {
+          const p = await api<{ id: string }>("/api/v1/projects", {
+            method: "POST",
+            json: {
+              title,
+              description: f.get("description"),
+              paper_id: f.get("paper_id") || null,
+              kind: f.get("kind"),
+              code_url: f.get("code_url"),
+              code_commit: f.get("code_commit"),
+            },
+          });
+          router.push(`/projects/${p.id}`);
+          router.refresh();
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "Could not create the project");
+          setBusy(false);
+        }
+      }}
+    >
+      {error && <p role="alert" className="rounded-lg bg-surface-2 px-3 py-2 text-sm text-[var(--critical)]">{error}</p>}
+      <Field label="Paper" htmlFor="paper_id" hint={papers.length ? "The paper whose results you are reproducing." : "Your library is empty; you can link a paper later from the project."}>
+        <Select
+          id="paper_id"
+          name="paper_id"
+          defaultValue={preselect ?? ""}
+          onChange={(e) => {
+            const p = papers.find((x) => x.id === e.target.value);
+            if (p && !title) setTitle(`Reproducing: ${p.title}`.slice(0, 300));
+          }}
+        >
+          <option value="">No paper yet</option>
+          {papers.map((p) => <option key={p.id} value={p.id}>{p.title}{p.publication_year ? ` (${p.publication_year})` : ""}</option>)}
+        </Select>
+      </Field>
+      <Field label="Project title" htmlFor="title"><Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required maxLength={300} /></Field>
+      <Field label="Description" htmlFor="description"><Textarea id="description" name="description" placeholder="What are you trying to check, and why?" maxLength={5000} /></Field>
+      <Field label="Kind of work" htmlFor="kind" hint="Re-running the authors' code and data, writing your own implementation, or testing the claim on new data.">
+        <Select id="kind" name="kind" defaultValue="computational_reproduction">
+          <option value="computational_reproduction">Computational reproduction</option>
+          <option value="reimplementation">Reimplementation</option>
+          <option value="replication">Independent replication</option>
+        </Select>
+      </Field>
+      <div className="grid gap-4 sm:grid-cols-[1fr_200px]">
+        <Field label="Code repository" htmlFor="code_url"><Input id="code_url" name="code_url" type="url" placeholder="https://github.com/…" /></Field>
+        <Field label="Commit" htmlFor="code_commit"><Input id="code_commit" name="code_commit" className="mono !text-[13px]" maxLength={80} /></Field>
       </div>
-      {error && (
-        <p role="alert" className="panel-in mt-4 rounded-lg bg-surface-2 px-3 py-2 text-sm">
-          <span aria-hidden style={{ color: "var(--critical)" }}>✕ </span>
-          {error}
-        </p>
-      )}
-      {created && (
-        <div className="panel-in mt-5 rounded-xl border border-line bg-surface-2 p-4 text-sm">
-          <p>
-            <span aria-hidden style={{ color: "var(--good)" }}>✓ </span>
-            Created <Link href={`/projects/${created.slug}`}>{created.title}</Link>
-          </p>
-          <p className="label mt-3">Project token · shown once</p>
-          <code className="mono block break-all rounded-lg border border-line bg-surface px-3 py-2 text-xs">{created.token}</code>
-          <p className="mt-2 text-xs text-ink-3">Anyone with this token can edit the project and upload runs. It is saved in this browser; keep a copy for the command line.</p>
-        </div>
-      )}
-    </div>
+      <Button type="submit" loading={busy}>Create project</Button>
+    </form>
   );
 }

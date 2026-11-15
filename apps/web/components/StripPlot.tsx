@@ -1,5 +1,12 @@
-import type { RunSetComparison } from "@/lib/api";
-import { fmt } from "@/lib/api";
+import { fmt } from "@/lib/utils";
+
+export type StripRow = {
+  run_set: string;
+  exploratory?: boolean;
+  n: number;
+  points: { run_id: string | number; seed: number | null; value: number }[];
+  summary: { mean: number; sd: number | null; ci_low: number | null; ci_high: number | null } | null;
+};
 
 const W = 760;
 const LEFT = 196;
@@ -27,7 +34,7 @@ function jitter(i: number): number {
  * One row per run set. Every dot is one run; the dark tick and bar are the mean and
  * its 95% confidence interval; the vertical line is the value the paper reports.
  */
-export function StripPlot({ runSets, published, unit }: { runSets: RunSetComparison[]; published: number; unit: string }) {
+export function StripPlot({ runSets, published, unit }: { runSets: StripRow[]; published: number; unit: string }) {
   const rows = runSets.filter((rs) => rs.n > 0);
   if (rows.length === 0) return null;
   const all = rows.flatMap((rs) => rs.points.map((p) => p.value)).concat(published);

@@ -26,6 +26,8 @@ export const auth = betterAuth({
     },
   },
   session: { expiresIn: 60 * 60 * 24 * 14, updateAge: 60 * 60 * 24 },
+  // Deleting an account removes everything it owns (foreign keys cascade).
+  user: { deleteUser: { enabled: true } },
   rateLimit: { enabled: true, window: 60, max: 60 },
   databaseHooks: {
     user: {
