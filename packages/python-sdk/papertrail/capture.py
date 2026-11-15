@@ -113,18 +113,32 @@ def _gpus():
     return [line.strip() for line in out.stdout.splitlines() if line.strip()] if out.returncode == 0 else []
 
 
-def environment():
-    return {
-        "python": platform.python_version(),
-        "python_implementation": platform.python_implementation(),
-        "platform": platform.platform(),
-        "os": platform.system(),
-        "machine": platform.machine(),
+def _memory_gb():
+    try:
+        with open("/proc/meminfo") as f:
+            for line in f:
+                if line.startswith("MemTotal:"):
+                    return round(int(line.split()[1]) / 1024 / 1024, 1)
+    except (OSError, ValueError):
+        pass
+    return None
+
+
+def environment(packages=True):
+    """The payload's environment block: interpreter, OS, hardware, installed packages."""
+    hardware = {
+        "machine": platform.machine() or None,
         "cpu_model": _cpu_model(),
         "cpu_count": os.cpu_count(),
+        "memory_gb": _memory_gb(),
         "gpus": _gpus(),
-        "packages": installed_packages(),
-        "executable_in_virtualenv": sys.prefix != getattr(sys, "base_prefix", sys.prefix),
+    }
+    return {
+        "python": platform.python_version(),
+        "os": "%s %s" % (platform.system(), platform.release()),
+        "platform": platform.platform()[:300],
+        "hardware": {k: v for k, v in hardware.items() if v is not None},
+        "packages": {k[:120]: str(v)[:80] for k, v in sorted(installed_packages().items())} if packages else {},
     }
 
 

@@ -93,7 +93,9 @@ export async function addArtifact(db: Db, token: VerifiedToken, runId: string, m
   return a;
 }
 
-async function finish(db: Db, token: VerifiedToken, runId: string, status: "completed" | "failed" | "cancelled", input: { completed_at?: string | null; duration_seconds?: number | null; failure_summary?: string | null }) {
+type FinishInput = { completed_at?: string | null; duration_seconds?: number | null; failure_summary?: string | null; parameters?: Record<string, unknown> | null; dataset_version?: string | null };
+
+async function finish(db: Db, token: VerifiedToken, runId: string, status: "completed" | "failed" | "cancelled", input: FinishInput) {
   const run = await runForToken(db, token, runId);
   if (run.status === status) return one(db, "select * from experiment_runs where id = $1", [runId]); // idempotent retry
   if (run.status !== "running" && run.status !== "pending") throw new ApiError(409, "run_closed", `Run is already ${run.status}`);
@@ -101,13 +103,15 @@ async function finish(db: Db, token: VerifiedToken, runId: string, status: "comp
     db,
     `update experiment_runs set status = $2, completed_at = coalesce($3::timestamptz, now()),
        duration_seconds = coalesce($4, extract(epoch from (coalesce($3::timestamptz, now()) - started_at))),
-       failure_summary = $5 where id = $1 returning *`,
-    [runId, status, input.completed_at ?? null, input.duration_seconds ?? null, input.failure_summary ?? null],
+       failure_summary = $5, parameters = parameters || coalesce($6::jsonb, '{}'::jsonb),
+       dataset_version = coalesce($7, dataset_version) where id = $1 returning *`,
+    [runId, status, input.completed_at ?? null, input.duration_seconds ?? null, input.failure_summary ?? null,
+     input.parameters ? JSON.stringify(input.parameters) : null, input.dataset_version ?? null],
   );
   await logActivity(db, token.project_id, token.created_by, `run.${status}`, `Run "${run.name}" ${status}`);
   return row;
 }
 
-export const completeRun = (db: Db, t: VerifiedToken, id: string, input: { completed_at?: string | null; duration_seconds?: number | null }) => finish(db, t, id, "completed", input);
-export const failRun = (db: Db, t: VerifiedToken, id: string, input: { failure_summary: string; completed_at?: string | null; duration_seconds?: number | null; status: "failed" | "cancelled" }) =>
+export const completeRun = (db: Db, t: VerifiedToken, id: string, input: FinishInput) => finish(db, t, id, "completed", input);
+export const failRun = (db: Db, t: VerifiedToken, id: string, input: FinishInput & { failure_summary: string; status: "failed" | "cancelled" }) =>
   finish(db, t, id, input.status, input);

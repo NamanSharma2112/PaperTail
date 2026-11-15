@@ -218,9 +218,14 @@ export const sdkMetrics = z.object({
     .max(1000),
 });
 
+// Parameters and dataset version logged after the run started are sent when it finishes.
+const sdkParameters = z.record(z.string().max(120), z.union([jsonScalar, z.array(jsonScalar).max(100)]));
+
 export const sdkComplete = z.object({
   completed_at: z.string().datetime({ offset: true }).nullish(),
   duration_seconds: z.number().min(0).finite().nullish(),
+  parameters: sdkParameters.nullish(),
+  dataset_version: optText(500),
 });
 
 export const sdkFail = z.object({
@@ -228,6 +233,8 @@ export const sdkFail = z.object({
   completed_at: z.string().datetime({ offset: true }).nullish(),
   duration_seconds: z.number().min(0).finite().nullish(),
   status: z.enum(["failed", "cancelled"]).default("failed"),
+  parameters: sdkParameters.nullish(),
+  dataset_version: optText(500),
 });
 
 export const ARTIFACT_MAX_BYTES = 2 * 1024 * 1024;

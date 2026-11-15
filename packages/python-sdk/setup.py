@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name="papertrail",
-    version="0.1.0",
+    version="0.2.0",
     packages=["papertrail"],
     python_requires=">=3.7",
     entry_points={"console_scripts": ["papertrail = papertrail.cli:main"]},
