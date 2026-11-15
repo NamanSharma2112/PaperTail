@@ -1,0 +1,291 @@
+{
+  "source": "OpenAlex, referenced_works of W2519887557 (arXiv:1609.02907), fetched one work at a time",
+  "fetched": "2026-11-15",
+  "listed_by_openalex": 22,
+  "resolved": 21,
+  "note": "One of the 22 referenced OpenAlex IDs returned 404 and is omitted. OpenAlex's reference list is its own extraction and may not match the paper's bibliography exactly.",
+  "references": [
+    {
+      "openalex_id": "W2194775991",
+      "title": "Deep Residual Learning for Image Recognition",
+      "year": 2016,
+      "authors": [
+        "Kaiming He",
+        "Xiangyu Zhang",
+        "Shaoqing Ren",
+        "Jian Sun"
+      ],
+      "doi": "10.1109/cvpr.2016.90",
+      "arxiv_id": null,
+      "cited_by_count": 243611
+    },
+    {
+      "openalex_id": "W2964121744",
+      "title": "Adam: A Method for Stochastic Optimization",
+      "year": 2015,
+      "authors": [
+        "D.P. Kingma",
+        "L.J. Ba"
+      ],
+      "doi": "10.48550/arxiv.1412.6980",
+      "arxiv_id": "1412.6980",
+      "cited_by_count": 132591
+    },
+    {
+      "openalex_id": "W2187089797",
+      "title": "Visualizing Data using t-SNE",
+      "year": 2008,
+      "authors": [
+        "Laurens J. P. van der Maaten",
+        "Geoffrey E. Hinton"
+      ],
+      "doi": null,
+      "arxiv_id": null,
+      "cited_by_count": 33660
+    },
+    {
+      "openalex_id": "W2095705004",
+      "title": "Dropout: a simple way to prevent neural networks from overfitting",
+      "year": 2014,
+      "authors": [
+        "Nitish Srivastava",
+        "Geoffrey E. Hinton",
+        "Alex Krizhevsky",
+        "Ilya Sutskever",
+        "Ruslan Salakhutdinov"
+      ],
+      "doi": null,
+      "arxiv_id": null,
+      "cited_by_count": 33578
+    },
+    {
+      "openalex_id": "W2962756421",
+      "title": "node2vec: Scalable Feature Learning for Networks",
+      "year": 2016,
+      "authors": [
+        "Aditya Grover",
+        "Jure Leskovec"
+      ],
+      "doi": "10.1145/2939672.2939754",
+      "arxiv_id": "1607.00653",
+      "cited_by_count": 11954
+    },
+    {
+      "openalex_id": "W2154851992",
+      "title": "DeepWalk: online learning of social representations",
+      "year": 2014,
+      "authors": [
+        "Bryan Perozzi",
+        "Rami Al-Rfou",
+        "Steven Skiena"
+      ],
+      "doi": "10.1145/2623330.2623732",
+      "arxiv_id": "1403.6652",
+      "cited_by_count": 10449
+    },
+    {
+      "openalex_id": "W2116341502",
+      "title": "The Graph Neural Network Model",
+      "year": 2008,
+      "authors": [
+        "Franco Scarselli",
+        "Marco Gori",
+        "Ah Chung Tsoi",
+        "Markus Hagenbuchner",
+        "Gabriele Monfardini"
+      ],
+      "doi": "10.1109/tnn.2008.2005605",
+      "arxiv_id": null,
+      "cited_by_count": 10260
+    },
+    {
+      "openalex_id": "W2468907370",
+      "title": "Advances In Deep Learning On Graphs (Gsp'18 Workshop)",
+      "year": 2016,
+      "authors": [
+        "Micha\u00ebl Defferrard",
+        "Xavier Bresson",
+        "Pierre Vandergheynst"
+      ],
+      "doi": "10.48550/arxiv.1606.09375",
+      "arxiv_id": "1606.09375",
+      "cited_by_count": 7035
+    },
+    {
+      "openalex_id": "W1888005072",
+      "title": "LINE: Large-scale Information Network Embedding",
+      "year": 2015,
+      "authors": [
+        "Jian Tang",
+        "Meng Qu",
+        "Mingzhe Wang",
+        "Ming Zhang",
+        "Jun Yan",
+        "Qiaozhu Mei"
+      ],
+      "doi": "10.1145/2736277.2741093",
+      "arxiv_id": "1503.03578",
+      "cited_by_count": 5520
+    },
+    {
+      "openalex_id": "W1662382123",
+      "title": "Spectral Networks and Locally Connected Networks on Graphs",
+      "year": 2013,
+      "authors": [
+        "Joan Bruna",
+        "Wojciech Zaremba",
+        "Arthur D. Szlam",
+        "Yann LeCun"
+      ],
+      "doi": "10.48550/arxiv.1312.6203",
+      "arxiv_id": "1312.6203",
+      "cited_by_count": 4931
+    },
+    {
+      "openalex_id": "W2104290444",
+      "title": "Manifold Regularization: A Geometric Framework for Learning from Labeled and Unlabeled Examples",
+      "year": 2006,
+      "authors": [
+        "Mikhail Belkin",
+        "Partha Niyogi",
+        "Vikas Sindhwani"
+      ],
+      "doi": "10.5555/1248547.1248632",
+      "arxiv_id": null,
+      "cited_by_count": 3691
+    },
+    {
+      "openalex_id": "W2244807774",
+      "title": "Gated Graph Sequence Neural Networks",
+      "year": 2015,
+      "authors": [
+        "Yujia Li",
+        "Daniel Tarlow",
+        "Marc Brockschmidt",
+        "Richard S. Zemel"
+      ],
+      "doi": "10.48550/arxiv.1511.05493",
+      "arxiv_id": "1511.05493",
+      "cited_by_count": 3422
+    },
+    {
+      "openalex_id": "W2107008379",
+      "title": "Transductive Inference for Text Classification using Support Vector Machines",
+      "year": 1999,
+      "authors": [
+        "Thorsten Joachims"
+      ],
+      "doi": null,
+      "arxiv_id": null,
+      "cited_by_count": 2723
+    },
+    {
+      "openalex_id": "W2158787690",
+      "title": "Wavelets on graphs via spectral graph theory",
+      "year": 2010,
+      "authors": [
+        "David Kenric Hammond",
+        "Pierre Vandergheynst",
+        "R\u00e9mi Gribonval"
+      ],
+      "doi": "10.1016/j.acha.2010.04.005",
+      "arxiv_id": "0912.3848",
+      "cited_by_count": 2260
+    },
+    {
+      "openalex_id": "W1501856433",
+      "title": "A new model for learning in graph domains",
+      "year": 2006,
+      "authors": [
+        "Marco Gori",
+        "Gabriele Monfardini",
+        "Franco Scarselli"
+      ],
+      "doi": "10.1109/ijcnn.2005.1555942",
+      "arxiv_id": null,
+      "cited_by_count": 2204
+    },
+    {
+      "openalex_id": "W1512387364",
+      "title": "Toward an Architecture for Never-Ending Language Learning",
+      "year": 2010,
+      "authors": [
+        "Andrew Carlson",
+        "Justin Betteridge",
+        "Bryan Kisiel",
+        "Burr Settles",
+        "Estevam Rafael Hruschka Junior",
+        "Tom M. Mitchell"
+      ],
+      "doi": "10.1609/aaai.v24i1.7519",
+      "arxiv_id": null,
+      "cited_by_count": 1993
+    },
+    {
+      "openalex_id": "W2406128552",
+      "title": "Learning Convolutional Neural Networks for Graphs",
+      "year": 2016,
+      "authors": [
+        "Mathias Niepert",
+        "Mohamed M. Ahmed",
+        "Konstantin Kutzkov"
+      ],
+      "doi": "10.48550/arxiv.1605.05273",
+      "arxiv_id": "1605.05273",
+      "cited_by_count": 1595
+    },
+    {
+      "openalex_id": "W2315403234",
+      "title": "Revisiting Semi-Supervised Learning with Graph Embeddings",
+      "year": 2016,
+      "authors": [
+        "Zhilin Yang",
+        "William W. Cohen",
+        "Ruslan Salakhutdinov"
+      ],
+      "doi": "10.48550/arxiv.1603.08861",
+      "arxiv_id": "1603.08861",
+      "cited_by_count": 1437
+    },
+    {
+      "openalex_id": "W2109726592",
+      "title": "On Modularity Clustering",
+      "year": 2008,
+      "authors": [
+        "Ulrik Brandes",
+        "Daniel Delling",
+        "Marco Gaertler",
+        "Robert G\u00f6rke",
+        "Martin Hoefer",
+        "Zoran Nikoloski"
+      ],
+      "doi": "10.1109/tkde.2007.190689",
+      "arxiv_id": null,
+      "cited_by_count": 1286
+    },
+    {
+      "openalex_id": "W1677991150",
+      "title": "The Weisfeiler-Lehman Method and Graph Isomorphism Testing",
+      "year": 2011,
+      "authors": [
+        "B. L. Douglas"
+      ],
+      "doi": "10.48550/arxiv.1101.5211",
+      "arxiv_id": "1101.5211",
+      "cited_by_count": 73
+    },
+    {
+      "openalex_id": "W2242598663",
+      "title": "Semi-Supervised Learning with Spectral Graph Wavelets",
+      "year": 2011,
+      "authors": [
+        "David I Shuman",
+        "Mohammadjavad Faraji",
+        "Pierre Vandergheynst"
+      ],
+      "doi": null,
+      "arxiv_id": null,
+      "cited_by_count": 17
+    }
+  ]
+}

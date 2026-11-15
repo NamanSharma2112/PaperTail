@@ -65,6 +65,7 @@ class ClaimIn(BaseModel):
     blocked_reason: Optional[str] = None
     verdict: Optional[Verdict] = None
     verdict_note: Optional[str] = None
+    dataset_key: Optional[str] = None
 
 
 class ClaimUpdate(BaseModel):
@@ -83,6 +84,7 @@ class ClaimUpdate(BaseModel):
     blocked_reason: Optional[str] = None
     verdict: Optional[Verdict] = None
     verdict_note: Optional[str] = None
+    dataset_key: Optional[str] = None
 
 
 class RunSetIn(BaseModel):
@@ -122,3 +124,37 @@ class DeviationIn(BaseModel):
     why: Optional[str] = None
     expected_effect: Optional[str] = None
     applies_to: Optional[str] = None
+
+
+class DatasetSource(BaseModel):
+    relation: str = Field(min_length=1, max_length=40)
+    title: str = Field(min_length=1)
+    arxiv_id: Optional[str] = None
+    doi: Optional[str] = None
+    year: Optional[int] = None
+
+
+class DatasetIn(BaseModel):
+    key: str = Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9_\-\.]{0,78}$")
+    name: str = Field(min_length=1)
+    status: Literal["available", "partial", "unavailable"] = "available"
+    url: Optional[str] = None
+    version: Optional[str] = None
+    note: Optional[str] = None
+    sources: list[DatasetSource] = []
+
+
+class ReferenceIn(BaseModel):
+    title: str = Field(min_length=1)
+    year: Optional[int] = None
+    authors: list[str] = []
+    doi: Optional[str] = None
+    arxiv_id: Optional[str] = None
+    openalex_id: Optional[str] = None
+    cited_by_count: Optional[int] = None
+
+
+class ReferenceBatchIn(BaseModel):
+    source: str = Field(default="manual", max_length=40)
+    replace: bool = True
+    references: list[ReferenceIn] = Field(max_length=2000)

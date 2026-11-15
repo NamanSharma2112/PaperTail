@@ -36,6 +36,16 @@ def render(project: Project) -> str:
                               (" at commit `%s`" % project.code_commit) if project.code_commit else ""),
             "- Data: %s" % (project.data_note or "not recorded"), ""]
 
+    if project.datasets:
+        out += ["## Datasets", "", "| Dataset | Status | Where from | Note |", "|---|---|---|---|"]
+        cell = lambda t: (t or "–").replace("|", "\\|").replace("\n", " ")
+        for ds in project.datasets:
+            sources = "; ".join("%s %s%s" % (s.get("relation", "from"), s.get("title", ""),
+                                             " (%s)" % s["year"] if s.get("year") else "")
+                                for s in ds.sources or [])
+            out.append("| %s | %s | %s | %s |" % (cell(ds.name), ds.status, cell(sources), cell(ds.note)))
+        out.append("")
+
     out += ["## Claims and results", ""]
     for claim in project.claims:
         cmp_ = compare_claim(claim)
@@ -47,6 +57,9 @@ def render(project: Project) -> str:
                     "%s (%s)" % (_num(claim.reported_dispersion), claim.dispersion_kind or "kind not stated")
                     if claim.reported_dispersion is not None else "none"),
                 "- Source: %s" % (claim.source or "not recorded")]
+        if claim.dataset_key:
+            ds = next((d for d in project.datasets if d.key == claim.dataset_key), None)
+            out.append("- Measured on: %s" % (ds.name if ds else claim.dataset_key))
         if claim.provenance != "reported":
             out.append("- Note: this value is %s, not stated by the authors." % claim.provenance)
         if claim.tolerance is not None:

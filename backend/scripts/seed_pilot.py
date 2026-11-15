@@ -50,6 +50,27 @@ DEVIATIONS = [
      "applies_to": "run set citeseer-no-early-stopping"},
 ]
 
+PLANETOID = {"relation": "split from", "title": "Revisiting Semi-Supervised Learning with Graph Embeddings",
+             "arxiv_id": "1603.08861", "year": 2016}
+SHIPPED = ("Shipped in the official repository as Planetoid pickle files (gcn/data/ind.%s.*); "
+           "SHA-256 of each file in pilot/gcn-kipf-welling-2017/env/dataset-sha256.txt.")
+DATASETS = [
+    {"key": "cora", "name": "Cora", "status": "available", "url": "https://github.com/kimiyoung/planetoid",
+     "note": SHIPPED % "cora" + " Edge count differs from the paper's Table 1 (5,278 vs 5,429).",
+     "sources": [PLANETOID]},
+    {"key": "citeseer", "name": "Citeseer", "status": "available", "url": "https://github.com/kimiyoung/planetoid",
+     "note": SHIPPED % "citeseer" + " Edge count differs from Table 1 (4,676 incl. 124 self-loops vs 4,732).",
+     "sources": [PLANETOID]},
+    {"key": "pubmed", "name": "Pubmed", "status": "available", "url": "https://github.com/kimiyoung/planetoid",
+     "note": SHIPPED % "pubmed" + " Edge count differs from Table 1 (44,327 vs 44,338).",
+     "sources": [PLANETOID]},
+    {"key": "nell", "name": "NELL", "status": "unavailable",
+     "note": "Not in the official repository. The paper describes it as extracted from the NELL knowledge "
+             "graph with preprocessing following Yang et al. (2016).",
+     "sources": [PLANETOID, {"relation": "built from", "title": "Toward an Architecture for Never-Ending Language Learning",
+                             "doi": "10.1609/aaai.v24i1.7519", "year": 2010}]},
+]
+
 VERDICTS = {
     "table2-gcn-cora": ("matched", "The 100-run mean is 0.03 points from the published value."),
     "table2-gcn-pubmed": ("matched", "The 100-run mean is 0.05 points from the published value."),
@@ -112,6 +133,13 @@ def main():
             sys.exit("%s %s failed: %s %s" % (method, path, resp.status_code, resp.text))
         return resp
 
+    for ds in DATASETS:
+        call("PUT", "/datasets", json=ds)
+    refs = json.loads((PILOT / "paper_references.json").read_text())
+    call("POST", "/references", json={"source": "openalex", "references": [
+        {k: r[k] for k in ("title", "year", "authors", "doi", "arxiv_id", "openalex_id", "cited_by_count")}
+        for r in refs["references"]]})
+
     for c in claims["claims"]:
         verdict, note = VERDICTS[c["id"]]
         call("POST", "/claims", json={
@@ -120,7 +148,7 @@ def main():
             "aggregation": c["reported_aggregation"], "reported_runs": 100,
             "reported_dispersion": c["reported_dispersion"], "source": c["source"],
             "blocked_reason": c.get("out_of_scope_reason", "").replace("BLOCKED: the", "The") or None,
-            "verdict": verdict, "verdict_note": note})
+            "verdict": verdict, "verdict_note": note, "dataset_key": c["dataset"]})
     for d in DEVIATIONS:
         call("POST", "/deviations", json=d)
 

@@ -11,6 +11,8 @@ Status: pre-MVP. No application code yet. The repository currently holds the fea
 
 ![Project page](docs/screenshots/project.png)
 
+![Graph of papers, claims, datasets and citations](docs/screenshots/graph.png)
+
 With Docker installed, one command starts everything (PostgreSQL, the API, the web app) and loads the GCN pilot:
 
 ```bash

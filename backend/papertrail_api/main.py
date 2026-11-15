@@ -13,13 +13,13 @@ from typing import Optional
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import select
+from sqlalchemy import inspect, select, text
 from sqlalchemy.orm import Session
 
-from . import paper_import, report, schemas
+from . import graph, paper_import, report, schemas
 from .comparison import compare_claim
 from .db import Base, engine, get_session
-from .models import Claim, Deviation, Paper, Project, Run, RunSet
+from .models import Claim, Dataset, Deviation, Paper, PaperReference, Project, Run, RunSet
 
 app = FastAPI(title="PaperTrail API", version="0.1.0")
 app.add_middleware(
@@ -28,8 +28,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# Tables are created on start-up for now; migrations come with the first schema change.
+# Tables are created on start-up. Until proper migrations exist, columns added to an
+# existing table are added here so older databases keep working.
 Base.metadata.create_all(engine)
+_ADDED_COLUMNS = {"claims": {"dataset_key": "VARCHAR(80)"}}
+with engine.begin() as _conn:
+    _inspector = inspect(_conn)
+    for _table, _columns in _ADDED_COLUMNS.items():
+        _have = {c["name"] for c in _inspector.get_columns(_table)}
+        for _name, _type in _columns.items():
+            if _name not in _have:
+                _conn.execute(text("ALTER TABLE %s ADD COLUMN %s %s" % (_table, _name, _type)))
 
 
 def _hash(token: str) -> str:
@@ -74,6 +83,11 @@ def _deviation_out(d: Deviation) -> dict:
             "expected_effect": d.expected_effect, "applies_to": d.applies_to}
 
 
+def _dataset_out(d: Dataset) -> dict:
+    return {"key": d.key, "name": d.name, "status": d.status, "url": d.url, "version": d.version,
+            "note": d.note, "sources": d.sources or []}
+
+
 def _run_out(run: Run) -> dict:
     data = {c.name: getattr(run, c.name) for c in Run.__table__.columns}
     data["run_set"] = run.run_set.key
@@ -91,7 +105,9 @@ def _project_summary(project: Project) -> dict:
             "verdicts": {v: sum(1 for c in project.claims if c.verdict == v)
                          for v in sorted({c.verdict for c in project.claims if c.verdict})},
             "runs": sum(len(rs.runs) for rs in project.run_sets),
-            "deviations": len(project.deviations)}
+            "deviations": len(project.deviations),
+            "datasets": len(project.datasets),
+            "references": len(project.paper.references)}
 
 
 def _project_out(project: Project) -> dict:
@@ -100,7 +116,9 @@ def _project_out(project: Project) -> dict:
                 data_note=project.data_note,
                 claims=[_claim_out(c) for c in project.claims],
                 run_sets=[_run_set_out(rs) for rs in project.run_sets],
-                deviations=[_deviation_out(d) for d in project.deviations])
+                deviations=[_deviation_out(d) for d in project.deviations],
+                datasets=[_dataset_out(d) for d in project.datasets],
+                datasets_count=len(project.datasets))
     return data
 
 
@@ -299,6 +317,58 @@ def delete_deviation(key: str, project: Project = Depends(writable_project),
     session.delete(deviation)
     session.commit()
     return Response(status_code=204)
+
+
+@app.put("/api/projects/{slug}/datasets")
+def put_dataset(body: schemas.DatasetIn, project: Project = Depends(writable_project),
+                session: Session = Depends(get_session)):
+    """Create or replace a dataset record, by key."""
+    ds = next((d for d in project.datasets if d.key == body.key), None)
+    if ds is None:
+        ds = Dataset(project=project, key=body.key)
+        session.add(ds)
+    for field, value in body.model_dump().items():
+        setattr(ds, field, value)
+    session.commit()
+    return _dataset_out(ds)
+
+
+@app.delete("/api/projects/{slug}/datasets/{key}", status_code=204)
+def delete_dataset(key: str, project: Project = Depends(writable_project),
+                   session: Session = Depends(get_session)):
+    ds = next((d for d in project.datasets if d.key == key), None)
+    if ds is None:
+        raise HTTPException(404, "No dataset %r in this project" % key)
+    for claim in project.claims:
+        if claim.dataset_key == key:
+            claim.dataset_key = None
+    session.delete(ds)
+    session.commit()
+    return Response(status_code=204)
+
+
+@app.post("/api/projects/{slug}/references", status_code=201)
+def put_references(body: schemas.ReferenceBatchIn, project: Project = Depends(writable_project),
+                   session: Session = Depends(get_session)):
+    """Store the works the project's paper cites. replace=true swaps out the existing list."""
+    paper = project.paper
+    if body.replace:
+        paper.references.clear()
+    for ref in body.references:
+        paper.references.append(PaperReference(source=body.source, **ref.model_dump()))
+    session.commit()
+    return {"references": len(paper.references)}
+
+
+@app.get("/api/projects/{slug}/references")
+def list_references(project: Project = Depends(get_project)):
+    return [{c.name: getattr(r, c.name) for c in PaperReference.__table__.columns if c.name != "paper_id"}
+            for r in project.paper.references]
+
+
+@app.get("/api/graph")
+def workspace_graph(session: Session = Depends(get_session)):
+    return graph.build(list(session.scalars(select(Project).order_by(Project.id)).all()))
 
 
 @app.get("/api/projects/{slug}/report.md")

@@ -13,6 +13,8 @@ def utcnow() -> datetime:
 
 class Paper(Base):
     __tablename__ = "papers"
+    references: Mapped[list["PaperReference"]] = relationship(cascade="all, delete-orphan",
+                                                              order_by="PaperReference.id")
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(Text)
@@ -52,6 +54,8 @@ class Project(Base):
     deviations: Mapped[list["Deviation"]] = relationship(back_populates="project",
                                                          cascade="all, delete-orphan",
                                                          order_by="Deviation.id")
+    datasets: Mapped[list["Dataset"]] = relationship(back_populates="project", cascade="all, delete-orphan",
+                                                     order_by="Dataset.id")
 
 
 class Claim(Base):
@@ -80,6 +84,8 @@ class Claim(Base):
     tolerance_reason: Mapped[Optional[str]] = mapped_column(Text)
     # A claim that cannot be attempted (missing data, missing code) is blocked, not failed.
     blocked_reason: Mapped[Optional[str]] = mapped_column(Text)
+    # Which of the project's datasets the number was measured on (Dataset.key).
+    dataset_key: Mapped[Optional[str]] = mapped_column(String(80))
     # The researcher's conclusion. Never computed.
     verdict: Mapped[Optional[str]] = mapped_column(String(20))
     verdict_note: Mapped[Optional[str]] = mapped_column(Text)
@@ -152,3 +158,42 @@ class Deviation(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     project: Mapped[Project] = relationship(back_populates="deviations")
+
+
+class Dataset(Base):
+    """A dataset a project uses, and the papers it comes from."""
+
+    __tablename__ = "datasets"
+    __table_args__ = (UniqueConstraint("project_id", "key"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    project_id: Mapped[int] = mapped_column(ForeignKey("projects.id"))
+    key: Mapped[str] = mapped_column(String(80))
+    name: Mapped[str] = mapped_column(Text)
+    # available: obtained and used. partial: obtained but differs from the paper's description.
+    # unavailable: could not be obtained.
+    status: Mapped[str] = mapped_column(String(20), default="available")
+    url: Mapped[Optional[str]] = mapped_column(Text)
+    version: Mapped[Optional[str]] = mapped_column(Text)
+    note: Mapped[Optional[str]] = mapped_column(Text)
+    # [{"relation": "split from", "title": ..., "arxiv_id": ..., "doi": ..., "year": ...}]
+    sources: Mapped[list] = mapped_column(JSON, default=list)
+
+    project: Mapped[Project] = relationship(back_populates="datasets")
+
+
+class PaperReference(Base):
+    """A work the paper cites, as listed by a bibliographic source such as OpenAlex."""
+
+    __tablename__ = "paper_references"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    paper_id: Mapped[int] = mapped_column(ForeignKey("papers.id"), index=True)
+    title: Mapped[str] = mapped_column(Text)
+    year: Mapped[Optional[int]] = mapped_column(Integer)
+    authors: Mapped[list] = mapped_column(JSON, default=list)
+    doi: Mapped[Optional[str]] = mapped_column(String(200))
+    arxiv_id: Mapped[Optional[str]] = mapped_column(String(40))
+    openalex_id: Mapped[Optional[str]] = mapped_column(String(40))
+    cited_by_count: Mapped[Optional[int]] = mapped_column(Integer)
+    source: Mapped[Optional[str]] = mapped_column(String(40))
