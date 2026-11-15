@@ -10,3 +10,5 @@ node_modules/
 *.egg-info/
 .papertrail/
 .next/
+next-env.d.ts
+*.tsbuildinfo
