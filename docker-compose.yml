@@ -17,16 +17,20 @@ services:
     volumes:
       - papertrail-db:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U papertrail -d papertrail"]
+      # Over TCP on purpose: on first run the image starts a temporary server that only
+      # listens on a local socket, and a socket check would report ready too early.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 5432 -U papertrail -d papertrail"]
       interval: 3s
       timeout: 3s
-      retries: 30
+      retries: 40
+      start_period: 10s
 
   api:
     build:
       context: .
       dockerfile: backend/Dockerfile
     image: papertrail-api
+    restart: unless-stopped
     environment:
       DATABASE_URL: postgresql+psycopg://papertrail:papertrail@db:5432/papertrail
       PAPERTRAIL_WEB_ORIGINS: http://localhost:3000
@@ -52,6 +56,7 @@ services:
       args:
         PAPERTRAIL_API_URL: http://api:8000
     image: papertrail-web
+    restart: unless-stopped
     environment:
       PAPERTRAIL_API_URL: http://api:8000
     ports:

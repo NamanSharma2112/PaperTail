@@ -6,20 +6,26 @@ never executed here: runs arrive as records from the researcher's machine.
 """
 import hashlib
 import hmac
+import logging
 import os
 import re
 import secrets
+import time
 from typing import Optional
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect, select, text
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
 from . import graph, paper_import, report, schemas
 from .comparison import compare_claim
 from .db import Base, engine, get_session
 from .models import Claim, Dataset, Deviation, Paper, PaperReference, Project, Run, RunSet
+
+log = logging.getLogger("papertrail")
+logging.basicConfig(level=logging.INFO, format="%(levelname)s:     %(message)s")
 
 app = FastAPI(title="PaperTrail API", version="0.1.0")
 app.add_middleware(
@@ -28,8 +34,30 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+def _wait_for_database(timeout: float = 90.0) -> None:
+    """Wait until the database accepts connections, so a slow-starting PostgreSQL
+    (for example on first run in Docker) delays the API instead of crashing it."""
+    deadline = time.monotonic() + timeout
+    attempt = 0
+    while True:
+        try:
+            with engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            if attempt:
+                log.warning("database is ready")
+            return
+        except OperationalError as exc:
+            attempt += 1
+            if time.monotonic() > deadline:
+                raise
+            if attempt == 1 or attempt % 10 == 0:
+                log.warning("waiting for the database: %s", str(exc).splitlines()[0])
+            time.sleep(1)
+
+
 # Tables are created on start-up. Until proper migrations exist, columns added to an
 # existing table are added here so older databases keep working.
+_wait_for_database()
 Base.metadata.create_all(engine)
 _ADDED_COLUMNS = {"claims": {"dataset_key": "VARCHAR(80)"}}
 with engine.begin() as _conn:
