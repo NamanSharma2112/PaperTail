@@ -1,0 +1,23 @@
+import type { NextConfig } from "next";
+
+const config: NextConfig = {
+  // A self-contained server bundle, so the Docker image needs no node_modules.
+  output: "standalone",
+  poweredByHeader: false,
+  serverExternalPackages: ["pg"],
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
+    ];
+  },
+};
+
+export default config;
