@@ -1,6 +1,12 @@
-# Local PostgreSQL for development. The API also runs on SQLite with no setup.
-#   docker compose up -d db
-#   DATABASE_URL=postgresql+psycopg://papertrail:papertrail@localhost:5432/papertrail uvicorn papertrail_api.main:app
+# Run all of PaperTrail with one command:
+#
+#   docker compose up --build
+#
+# then open http://localhost:3000. The GCN pilot reproduction is loaded on first start;
+# its project token is printed by the "seed" service (docker compose logs seed).
+# Data lives in the "papertrail-db" volume; `docker compose down -v` removes it.
+name: papertrail
+
 services:
   db:
     image: postgres:16-alpine
@@ -8,9 +14,51 @@ services:
       POSTGRES_USER: papertrail
       POSTGRES_PASSWORD: papertrail
       POSTGRES_DB: papertrail
-    ports:
-      - "127.0.0.1:5432:5432"
     volumes:
       - papertrail-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U papertrail -d papertrail"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    image: papertrail-api
+    environment:
+      DATABASE_URL: postgresql+psycopg://papertrail:papertrail@db:5432/papertrail
+      PAPERTRAIL_WEB_ORIGINS: http://localhost:3000
+      # OPENALEX_API_KEY: ""   # optional, for frequent DOI imports
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  seed:
+    image: papertrail-api
+    command: ["python", "scripts/seed_pilot.py", "--api", "http://api:8000"]
+    restart: "no"
+    depends_on:
+      api:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      args:
+        PAPERTRAIL_API_URL: http://api:8000
+    image: papertrail-web
+    environment:
+      PAPERTRAIL_API_URL: http://api:8000
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+
 volumes:
   papertrail-db:

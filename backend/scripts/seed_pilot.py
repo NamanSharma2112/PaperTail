@@ -83,13 +83,24 @@ def main():
     claims = json.loads((PILOT / "paper_claims.json").read_text())
     paper = claims["paper"]
 
-    r = http.post("/api/projects", json={
-        "identifier": paper["arxiv_id"], "slug": SLUG, "title": "GCN (Kipf & Welling, ICLR 2017)",
+    if http.get("/api/projects/%s" % SLUG).status_code == 200:
+        print("The pilot project is already loaded: %s/api/projects/%s" % (args.api, SLUG))
+        return
+    project = {
+        "slug": SLUG, "title": "GCN (Kipf & Welling, ICLR 2017)",
         "summary": "The official code run 100 times per dataset with seeds 0-99, compared with the "
                    "'GCN (this paper)' row of Table 2.",
         "code_url": paper["official_code"], "code_commit": paper["official_code_commit_evaluated"],
         "data_note": "Cora, Citeseer and Pubmed as shipped in the repository (Planetoid split). "
-                     "NELL is not in the repository."})
+                     "NELL is not in the repository."}
+    r = http.post("/api/projects", json=dict(project, identifier=paper["arxiv_id"]))
+    if r.status_code == 502:
+        # arXiv not reachable (offline, firewall): use the metadata recorded with the pilot.
+        print("arXiv lookup failed; using the paper details stored with the pilot.")
+        r = http.post("/api/projects", json=dict(project, paper={
+            "title": paper["title"], "authors": paper["authors"], "venue": paper["venue"],
+            "arxiv_id": paper["arxiv_id"], "url": "https://arxiv.org/abs/%s" % paper["arxiv_id"],
+            "metadata_source": "manual"}))
     if r.status_code != 201:
         sys.exit("could not create the project: %s %s" % (r.status_code, r.text))
     token = r.json()["token"]
@@ -145,6 +156,7 @@ def main():
     print("project: %s/api/projects/%s" % (args.api, SLUG))
     print("runs uploaded: %d" % total)
     print("token: %s" % token)
+    print("Keep this token: it is needed to edit the project and is not shown again.")
 
 
 if __name__ == "__main__":

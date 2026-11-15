@@ -11,13 +11,33 @@ Status: pre-MVP. No application code yet. The repository currently holds the fea
 
 ![Project page](docs/screenshots/project.png)
 
-Backend (Python 3.11+):
+With Docker installed, one command starts everything (PostgreSQL, the API, the web app) and loads the GCN pilot:
+
+```bash
+docker compose up --build
+```
+
+Open http://localhost:3000. The API is also on http://localhost:8000.
+
+The pilot project's token, needed to edit it, is printed once by the seed step:
+
+```bash
+docker compose logs seed
+```
+
+Stop with Ctrl+C. Data is kept in a Docker volume between runs. To delete it as well:
+
+```bash
+docker compose down -v
+```
+
+### Without Docker
+
+Backend (Python 3.11+), using SQLite by default:
 
 ```bash
 cd backend && pip install -e ".[dev]" && uvicorn papertrail_api.main:app --port 8000
 ```
-
-Load the pilot reproduction (prints the project's token):
 
 ```bash
 cd backend && python scripts/seed_pilot.py --api http://localhost:8000
@@ -26,18 +46,18 @@ cd backend && python scripts/seed_pilot.py --api http://localhost:8000
 Web app (Node 20+):
 
 ```bash
-cd web && npm install && npm run build && npm start
+cd web && npm install && npm run dev
 ```
 
-Open http://localhost:3000. The web app forwards `/api` to `PAPERTRAIL_API_URL` (default `http://127.0.0.1:8000`).
+### Recording runs
 
-Record runs from your own machine (Python 3.7+, no dependencies):
+On the machine where the research code runs (Python 3.7+, no dependencies):
 
 ```bash
 pip install ./sdk && papertrail run --run-set cora --seed 0 --metric 'acc=accuracy= ([0-9.]+)' -- python train.py
 ```
 
-Tests:
+### Tests
 
 ```bash
 cd backend && pytest -q
