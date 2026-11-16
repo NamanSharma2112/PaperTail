@@ -29,7 +29,7 @@ export async function createToken(db: Db, userId: string, projectId: string, inp
   if (role === "viewer") throw new ApiError(403, "forbidden", "Viewers cannot create ingestion tokens");
   const t = newToken();
   const expires = input.expires_in_days ? new Date(Date.now() + input.expires_in_days * 86400_000).toISOString() : null;
-  const row = await one(
+  const row = await one<{ id: string; name: string; token_prefix: string; expires_at: string | null; created_at: string }>(
     db,
     "insert into ingestion_tokens (project_id, created_by, name, token_hash, token_prefix, expires_at) values ($1,$2,$3,$4,$5,$6) returning id, name, token_prefix, expires_at, created_at",
     [projectId, userId, input.name, t.hash, t.prefix, expires],

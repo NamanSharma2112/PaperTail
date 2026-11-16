@@ -135,6 +135,25 @@ describe.runIf(enabled)("runs and tokens", () => {
   });
 });
 
+describe.runIf(enabled)("artifact storage", () => {
+  it("a project's artifacts cannot exceed its storage quota", async () => {
+    const ingest = await import("../../lib/server/services/ingest");
+    const t = await db.withUser("alice", (c) => tokens.createToken(c, "alice", pid, { name: "quota" }));
+    const verified = await db.withSystem((c) => tokens.verifyToken(c, t.token));
+    const live = await db.withSystem(async (c) => (await c.query("insert into experiment_runs (project_id, name, status) values ($1, 'q', 'running') returning id", [pid])).rows[0].id);
+    const before = process.env.ARTIFACT_PROJECT_QUOTA_MB;
+    process.env.ARTIFACT_PROJECT_QUOTA_MB = String(1500 / 1048576); // 1500 bytes
+    try {
+      const meta = { file_name: "a.txt", file_type: "text/plain" };
+      await db.withSystem((c) => ingest.addArtifact(c, verified!, live, meta, Buffer.alloc(1000, 97)));
+      await expect(db.withSystem((c) => ingest.addArtifact(c, verified!, live, meta, Buffer.alloc(1000, 98)))).rejects.toMatchObject({ status: 413, code: "quota_exceeded" });
+    } finally {
+      if (before === undefined) delete process.env.ARTIFACT_PROJECT_QUOTA_MB;
+      else process.env.ARTIFACT_PROJECT_QUOTA_MB = before;
+    }
+  });
+});
+
 describe.runIf(enabled)("integrity", () => {
   it("deleting a project removes its runs, metrics, tokens and records", async () => {
     const p = await db.withUser("alice", (c) => projects.createProject(c, "alice", { title: "temp", description: null, kind: "computational_reproduction", code_url: null, code_commit: null }));

@@ -1,0 +1,126 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: Web app (typecheck, unit + database tests, build)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: papertrail_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U ci -d papertrail_test"
+          --health-interval 3s --health-timeout 3s --health-retries 30
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - name: Unit and database tests (row-level security included)
+        run: npm test
+        env:
+          TEST_DATABASE_URL: postgres://ci:ci@127.0.0.1:5432/papertrail_test
+      - run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+  e2e:
+    name: End-to-end workflow
+    runs-on: ubuntu-latest
+    needs: web
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: papertrail
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U ci -d papertrail"
+          --health-interval 3s --health-timeout 3s --health-retries 30
+    env:
+      DATABASE_URL: postgres://ci:ci@127.0.0.1:5432/papertrail
+      BETTER_AUTH_SECRET: ci-only-secret-not-used-anywhere-else-0123456789
+      APP_URL: http://localhost:3000
+      BETTER_AUTH_URL: http://localhost:3000
+      E2E_BASE_URL: http://localhost:3000
+      NEXT_TELEMETRY_DISABLED: "1"
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm ci
+      - run: npm run db:migrate
+      - run: npm run build
+      - name: Start the production server
+        run: |
+          cp -r .next/static .next/standalone/.next/static
+          nohup node .next/standalone/server.js > server.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://localhost:3000/api/v1/health && exit 0; sleep 1; done
+          cat server.log; exit 1
+        env:
+          PORT: "3000"
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --trace off
+      - if: failure()
+        run: cat server.log
+
+  python-sdk:
+    name: Python SDK (${{ matrix.image }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # The oldest supported interpreter and a current one.
+        image: ["python:3.7-slim", "python:3.13-slim"]
+    container: ${{ matrix.image }}
+    defaults:
+      run:
+        working-directory: packages/python-sdk
+    steps:
+      - uses: actions/checkout@v4
+      - run: apt-get update && apt-get install -y --no-install-recommends git
+      - run: pip install pytest && pip install .
+      - run: python -m pytest -q
+
+  analysis:
+    name: Reference statistics
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/analysis
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pytest scipy && pip install -e .
+      - run: python -m pytest -q

@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import subprocess
 import sys
 import threading
@@ -214,6 +215,7 @@ def test_redaction():
     assert "hunter2" not in t and "secret@" not in t and "abcdefghijklmnop123" not in t and "zzzz" not in t
 
 
+@pytest.mark.skipif(shutil.which("git") is None, reason="needs the git executable to build a test repository")
 def test_git_state_reports_commit_and_dirtiness(tmp_path):
     def git(*args):
         subprocess.run(["git"] + list(args), cwd=str(tmp_path), check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

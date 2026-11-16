@@ -1,11 +1,15 @@
-# Run all of PaperTrail with one command:
+# Run PaperTrail with one command:
 #
 #   docker compose up --build
 #
-# then open http://localhost:3000. The GCN pilot reproduction is loaded on first start;
-# its project token is printed by the "seed" service (docker compose logs seed).
-# Data lives in the "papertrail-db" volume; `docker compose down -v` removes it.
-# To use a hosted PostgreSQL instead, copy .env.example to .env and set DATABASE_URL.
+# then open http://localhost:3000 and create an account.
+#
+# Database: by default the bundled PostgreSQL below. To use a hosted database (Aiven,
+# Neon, ...), put DATABASE_URL=postgres://... in a .env file next to this one; see
+# .env.example. Migrations run automatically when the app starts.
+#
+# Demonstration data (the GCN pilot) can be loaded into your account afterwards:
+#   docker compose exec web node scripts/seed-pilot.mjs --email you@example.org
 name: papertrail
 
 services:
@@ -26,47 +30,35 @@ services:
       retries: 40
       start_period: 10s
 
-  api:
+  web:
     build:
       context: .
-      dockerfile: backend/Dockerfile
-    image: papertrail-api
+      dockerfile: apps/web/Dockerfile
+    image: papertrail-web
     restart: unless-stopped
     environment:
-      # Set DATABASE_URL in a .env file next to this one to use a hosted database
-      # (see .env.example); otherwise the bundled "db" service is used.
-      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://papertrail:papertrail@db:5432/papertrail}
-      PAPERTRAIL_WEB_ORIGINS: http://localhost:3000
-      # OPENALEX_API_KEY: ""   # optional, for frequent DOI imports
+      # The bundled database's owner is a superuser; the app still enforces row-level
+      # security through its restricted papertrail_app role.
+      DATABASE_URL: ${DATABASE_URL:-postgres://papertrail:papertrail@db:5432/papertrail}
+      DATABASE_CA_CERT: ${DATABASE_CA_CERT:-}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-}
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      BETTER_AUTH_URL: ${APP_URL:-http://localhost:3000}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      CROSSREF_MAILTO: ${CROSSREF_MAILTO:-}
+      OPENALEX_API_KEY: ${OPENALEX_API_KEY:-}
+      DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-5}
+      ARTIFACT_PROJECT_QUOTA_MB: ${ARTIFACT_PROJECT_QUOTA_MB:-50}
+      SDK_RATE_LIMIT_PER_MIN: ${SDK_RATE_LIMIT_PER_MIN:-600}
+    volumes:
+      - papertrail-data:/data
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:3000:3000"
     depends_on:
       db:
         condition: service_healthy
 
-  seed:
-    image: papertrail-api
-    command: ["python", "scripts/seed_pilot.py", "--api", "http://api:8000"]
-    restart: "no"
-    depends_on:
-      api:
-        condition: service_healthy
-
-  web:
-    build:
-      context: .
-      dockerfile: web/Dockerfile
-      args:
-        PAPERTRAIL_API_URL: http://api:8000
-    image: papertrail-web
-    restart: unless-stopped
-    environment:
-      PAPERTRAIL_API_URL: http://api:8000
-    ports:
-      - "127.0.0.1:3000:3000"
-    depends_on:
-      api:
-        condition: service_healthy
-
 volumes:
   papertrail-db:
+  papertrail-data:

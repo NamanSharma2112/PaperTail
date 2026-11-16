@@ -1,5 +1,7 @@
 # PaperTrail: feasibility assessment
 
+> **Note (16 November 2026).** This is the original assessment, kept as written. Two things have changed since. The application was built as one Next.js app with TypeScript statistics, tested against this repository's Python reference implementation, instead of FastAPI. Small artifacts are stored and capped in PostgreSQL. See [architecture.md](architecture.md) and [status.md](status.md).
+
 Date: 14 November 2026. Scope: Phase 1 of the mission (critical feasibility assessment) and Phase 3 (pilot paper selection), with the parts of Phase 2 needed to decide what statistics the MVP needs.
 
 ## Verdict

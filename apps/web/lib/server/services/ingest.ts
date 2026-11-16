@@ -83,6 +83,13 @@ export async function addMetrics(db: Db, token: VerifiedToken, runId: string, me
 export async function addArtifact(db: Db, token: VerifiedToken, runId: string, meta: { file_name: string; file_type: string }, content: Buffer) {
   const run = await runForToken(db, token, runId);
   if (run.status !== "running") throw new ApiError(409, "run_closed", `Run is ${run.status}; artifacts can only be added while it is running`);
+  // Artifacts live in PostgreSQL; cap each project's total so a free-tier database
+  // (Aiven's is 1 GB) cannot be filled by uploads.
+  const quota = Number(process.env.ARTIFACT_PROJECT_QUOTA_MB ?? 50) * 1024 * 1024;
+  const used = Number((await one<{ n: string }>(db, "select coalesce(sum(file_size), 0) as n from artifacts where project_id = $1", [token.project_id])).n);
+  if (used + content.length > quota) {
+    throw new ApiError(413, "quota_exceeded", `This project's artifact storage is full (${Math.round(quota / 1048576)} MB). Delete runs with large files or keep artifacts locally.`);
+  }
   const checksum = createHash("sha256").update(content).digest("hex");
   const a = await one<{ id: string }>(
     db,
